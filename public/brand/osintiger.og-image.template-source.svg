@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="OSINTiger social card">
+  <title>OSINTiger — Anonymous OSINT investigation platform</title>
+
+  <!-- Deep black background matching the OSINTiger product UI -->
+  <rect width="1200" height="630" fill="#0A0A0A"/>
+
+  <!--
+    Composition: mark on the left, wordmark + tagline on the right.
+    Mirrors the OSINTiger homepage's terminal aesthetic.
+  -->
+
+  <!-- Mark, left side.  -->
+  <g transform="translate(120, 195) scale(0.5)">
+    <circle cx="256" cy="240" r="176" fill="#FFFFFF"/>
+    <g transform="rotate(22 256 240)">
+      <rect x="242" y="16" width="28" height="448" fill="#0A0A0A"/>
+    </g>
+    <rect x="216" y="474" width="80" height="10" fill="#22E36A"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="460" y="340"
+        font-family="ui-monospace, 'JetBrains Mono', 'Berkeley Mono', 'Geist Mono', 'SF Mono', Menlo, Consolas, monospace"
+        font-size="92"
+        font-weight="700"
+        letter-spacing="-2"
+        fill="#FFFFFF">OSINTiger</text>
+
+  <!-- Tagline in monospaced, matching the homepage -->
+  <text x="460" y="392"
+        font-family="ui-monospace, 'JetBrains Mono', 'Berkeley Mono', 'Geist Mono', 'SF Mono', Menlo, Consolas, monospace"
+        font-size="22"
+        font-weight="400"
+        letter-spacing="0"
+        fill="#22E36A">// Anonymous OSINT investigation platform</text>
+
+  <!-- Bottom-right terminal prompt detail -->
+  <text x="1080" y="580"
+        text-anchor="end"
+        font-family="ui-monospace, 'JetBrains Mono', 'Berkeley Mono', 'Geist Mono', 'SF Mono', Menlo, Consolas, monospace"
+        font-size="16"
+        font-weight="400"
+        fill="#22E36A"
+        opacity="0.6">&gt;_ root@osintiger:~$ _</text>
+</svg>

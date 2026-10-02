@@ -1,0 +1,837 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+
+/*
+  OSINTiger HACKER AESTHETIC — Cyberpunk/Anonymous Intelligence Platform
+  Deep black background, neon green primary, cyan secondary, red warnings.
+  Monospace dominant typography. Terminal/command-line hybrid design.
+  "If Edward Snowden used an OSINT tool, this would be it."
+*/
+:root {
+  --radius: 2px;
+  /* Background: deep black */
+  --background: oklch(0.08 0 0);
+  /* Surface: slightly lighter black for cards/panels */
+  --card: oklch(0.12 0 0);
+  --card-foreground: oklch(0.88 0.005 145);
+  --popover: oklch(0.10 0 0);
+  --popover-foreground: oklch(0.88 0.005 145);
+  /* Primary accent: neon green #00ff41 */
+  --primary: oklch(0.72 0.22 145);
+  --primary-foreground: oklch(0.08 0 0);
+  /* Secondary: dark surface */
+  --secondary: oklch(0.16 0 0);
+  --secondary-foreground: oklch(0.88 0.005 145);
+  --muted: oklch(0.14 0 0);
+  --muted-foreground: oklch(0.55 0 0);
+  --accent: oklch(0.18 0.01 145);
+  --accent-foreground: oklch(0.72 0.22 145);
+  /* Destructive: red #ff0040 */
+  --destructive: oklch(0.62 0.24 25);
+  --border: oklch(0.72 0.22 145 / 15%);
+  --input: oklch(0.72 0.22 145 / 12%);
+  --ring: oklch(0.72 0.22 145);
+  /* Chart colors: green, cyan, red, amber, gray */
+  --chart-1: oklch(0.72 0.22 145);  /* neon green */
+  --chart-2: oklch(0.78 0.15 195);  /* cyan */
+  --chart-3: oklch(0.62 0.24 25);   /* red */
+  --chart-4: oklch(0.75 0.18 85);   /* amber */
+  --chart-5: oklch(0.55 0 0);       /* gray */
+  --sidebar: oklch(0.10 0 0);
+  --sidebar-foreground: oklch(0.88 0.005 145);
+  --sidebar-primary: oklch(0.72 0.22 145);
+  --sidebar-primary-foreground: oklch(0.08 0 0);
+  --sidebar-accent: oklch(0.16 0 0);
+  --sidebar-accent-foreground: oklch(0.72 0.22 145);
+  --sidebar-border: oklch(0.72 0.22 145 / 15%);
+  --sidebar-ring: oklch(0.72 0.22 145);
+  /* Hacker-specific custom properties */
+  --hack-green: #00ff41;
+  --hack-green-rgb: 0, 255, 65;
+  --hack-cyan: #00ffff;
+  --hack-cyan-rgb: 0, 255, 255;
+  --hack-red: #ff0040;
+  --hack-red-rgb: 255, 0, 64;
+  --hack-amber: #ffb000;
+  --hack-amber-rgb: 255, 176, 0;
+  --hack-orange: #ff8800;
+  --hack-orange-rgb: 255, 136, 0;
+  --hack-purple: #bb88ff;
+  --hack-purple-rgb: 187, 136, 255;
+  --hack-gray: #888888;
+  --hack-gray-rgb: 136, 136, 136;
+  --hack-bg: #0a0a0a;
+  --hack-bg-rgb: 10, 10, 10;
+  --hack-surface: #141414;
+  --hack-surface-rgb: 20, 20, 20;
+  --hack-border: rgba(0, 255, 65, 0.15);
+  --hack-border-rgb: 0, 255, 65;
+  --hack-glow: 0 0 8px rgba(0, 255, 65, 0.4);
+  --hack-glow-strong: 0 0 16px rgba(0, 255, 65, 0.6);
+  --hack-glow-cyan: 0 0 8px rgba(0, 255, 255, 0.4);
+}
+
+.dark {
+  --background: oklch(0.08 0 0);
+  --card: oklch(0.12 0 0);
+  --card-foreground: oklch(0.88 0.005 145);
+  --popover: oklch(0.10 0 0);
+  --popover-foreground: oklch(0.88 0.005 145);
+  --primary: oklch(0.72 0.22 145);
+  --primary-foreground: oklch(0.08 0 0);
+  --secondary: oklch(0.16 0 0);
+  --secondary-foreground: oklch(0.88 0.005 145);
+  --muted: oklch(0.14 0 0);
+  --muted-foreground: oklch(0.55 0 0);
+  --accent: oklch(0.18 0.01 145);
+  --accent-foreground: oklch(0.72 0.22 145);
+  --destructive: oklch(0.62 0.24 25);
+  --border: oklch(0.72 0.22 145 / 15%);
+  --input: oklch(0.72 0.22 145 / 12%);
+  --ring: oklch(0.72 0.22 145);
+  --chart-1: oklch(0.72 0.22 145);
+  --chart-2: oklch(0.78 0.15 195);
+  --chart-3: oklch(0.62 0.24 25);
+  --chart-4: oklch(0.75 0.18 85);
+  --chart-5: oklch(0.55 0 0);
+  --sidebar: oklch(0.10 0 0);
+  --sidebar-foreground: oklch(0.88 0.005 145);
+  --sidebar-primary: oklch(0.72 0.22 145);
+  --sidebar-primary-foreground: oklch(0.08 0 0);
+  --sidebar-accent: oklch(0.16 0 0);
+  --sidebar-accent-foreground: oklch(0.72 0.22 145);
+  --sidebar-border: oklch(0.72 0.22 145 / 15%);
+  --sidebar-ring: oklch(0.72 0.22 145);
+}
+
+/* Light theme override (kept for toggle, but hacker aesthetic is dark-first) */
+.light {
+  --background: oklch(0.96 0.002 145);
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(0.98 0.002 145);
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(0.98 0.002 145);
+  --popover-foreground: oklch(0.15 0 0);
+  --primary: oklch(0.55 0.20 145);
+  --primary-foreground: oklch(0.98 0.002 145);
+  --secondary: oklch(0.92 0.002 145);
+  --secondary-foreground: oklch(0.20 0 0);
+  --muted: oklch(0.93 0.002 145);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.90 0.005 145);
+  --accent-foreground: oklch(0.20 0 0);
+  --destructive: oklch(0.55 0.22 25);
+  --border: oklch(0.85 0.002 145);
+  --input: oklch(0.88 0.002 145);
+  --ring: oklch(0.55 0.20 145);
+  --chart-1: oklch(0.55 0.20 145);
+  --chart-2: oklch(0.60 0.15 195);
+  --chart-3: oklch(0.55 0.22 25);
+  --chart-4: oklch(0.65 0.18 85);
+  --chart-5: oklch(0.50 0 0);
+  --sidebar: oklch(0.95 0.002 145);
+  --sidebar-foreground: oklch(0.15 0 0);
+  --sidebar-primary: oklch(0.55 0.20 145);
+  --sidebar-primary-foreground: oklch(0.98 0.002 145);
+  --sidebar-accent: oklch(0.90 0.005 145);
+  --sidebar-accent-foreground: oklch(0.20 0 0);
+  --sidebar-border: oklch(0.85 0.002 145);
+  --sidebar-ring: oklch(0.55 0.20 145);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: dark;
+    font-size: 14px;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-jetbrains-mono), "Fira Code", "JetBrains Mono", monospace;
+    background-color: var(--hack-bg);
+    background-image:
+      linear-gradient(rgba(0, 255, 65, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 65, 0.015) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-attachment: fixed;
+  }
+  /* Terminal-style scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 255, 65, 0.3) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 65, 0.25);
+    border-radius: 0;
+    border: 1px solid rgba(0, 255, 65, 0.1);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 65, 0.5);
+  }
+  /* Focus indicators: green outline */
+  *:focus-visible {
+    outline: 1px solid var(--hack-green);
+    outline-offset: 1px;
+  }
+  /* Input fields: terminal style */
+  input, textarea {
+    caret-color: var(--hack-green);
+    font-family: var(--font-jetbrains-mono), monospace;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(0, 255, 65, 0.35);
+  }
+  input:focus, textarea:focus {
+    box-shadow: 0 0 0 1px var(--hack-green), var(--hack-glow);
+  }
+  /* Links: cyan */
+  a {
+    color: var(--hack-cyan);
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ============================================
+   HACKER AESTHETIC UTILITY CLASSES
+   ============================================ */
+
+/* Green glow utility */
+.glow-green {
+  box-shadow: var(--hack-glow);
+}
+.glow-green-strong {
+  box-shadow: var(--hack-glow-strong);
+}
+.glow-cyan {
+  box-shadow: var(--hack-glow-cyan);
+}
+
+/* Terminal panel — looks like a terminal window */
+.terminal-panel {
+  background: var(--hack-surface);
+  border: 1px solid var(--hack-border);
+  border-radius: 2px;
+  position: relative;
+}
+.terminal-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--hack-green), transparent);
+  opacity: 0.5;
+}
+
+/* Circuit board grid texture */
+.circuit-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 65, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Scan line effect — horizontal sweep */
+@keyframes scan-sweep {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(2000%); opacity: 0; }
+}
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--hack-green), transparent);
+  animation: scan-sweep 3s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Blinking cursor — terminal style */
+@keyframes blink-cursor {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.blink-cursor::after {
+  content: "_";
+  color: var(--hack-green);
+  animation: blink-cursor 1s step-end infinite;
+}
+
+/* Glitch effect for headers */
+@keyframes glitch {
+  0%, 100% { transform: translate(0); text-shadow: none; }
+  20% { transform: translate(-1px, 1px); text-shadow: 1px 0 0 var(--hack-red), -1px 0 0 var(--hack-cyan); }
+  40% { transform: translate(1px, -1px); text-shadow: -1px 0 0 var(--hack-red), 1px 0 0 var(--hack-cyan); }
+  60% { transform: translate(-1px, -1px); text-shadow: 1px 0 0 var(--hack-cyan), -1px 0 0 var(--hack-red); }
+  80% { transform: translate(1px, 1px); text-shadow: none; }
+}
+.glitch {
+  animation: glitch 3s infinite;
+}
+.glitch-hover:hover {
+  animation: glitch 0.3s ease;
+}
+
+/* Typewriter effect */
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--hack-green);
+  animation: typewriter 1.5s steps(40) forwards, blink-cursor 0.8s step-end infinite;
+}
+
+/* Hacker button — border-only, fills on hover */
+.hack-btn {
+  font-family: var(--font-jetbrains-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 12px;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid var(--hack-border);
+  color: var(--hack-green);
+  padding: 6px 14px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.hack-btn:hover {
+  background: rgba(0, 255, 65, 0.1);
+  border-color: var(--hack-green);
+  box-shadow: var(--hack-glow);
+  color: var(--hack-green);
+}
+.hack-btn:active {
+  background: rgba(0, 255, 65, 0.2);
+}
+.hack-btn-primary {
+  background: rgba(0, 255, 65, 0.1);
+  border-color: var(--hack-green);
+}
+.hack-btn-primary:hover {
+  background: var(--hack-green);
+  color: var(--hack-bg);
+}
+
+/* Terminal prompt prefix */
+.terminal-prompt::before {
+  content: "> ";
+  color: var(--hack-green);
+  font-weight: bold;
+}
+
+/* Classified document section header */
+.section-header {
+  font-family: var(--font-jetbrains-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--hack-green);
+  border-bottom: 1px solid var(--hack-border);
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+/* Status badge — terminal style */
+.status-badge {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border: 1px solid;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.status-online {
+  color: var(--hack-green);
+  border-color: var(--hack-green);
+  background: rgba(0, 255, 65, 0.05);
+}
+.status-error {
+  color: var(--hack-red);
+  border-color: var(--hack-red);
+  background: rgba(255, 0, 64, 0.05);
+}
+.status-warning {
+  color: var(--hack-amber);
+  border-color: var(--hack-amber);
+  background: rgba(255, 176, 0, 0.05);
+}
+
+/* Pulsing dot — activity indicator */
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--hack-green); }
+  50% { opacity: 0.5; box-shadow: 0 0 8px var(--hack-green); }
+}
+.pulse-green {
+  animation: pulse-green 1.5s ease-in-out infinite;
+}
+
+/* Progress bar — terminal style */
+@keyframes progress-stripe {
+  from { background-position: 0 0; }
+  to { background-position: 20px 0; }
+}
+.hack-progress {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--hack-green) 0,
+    var(--hack-green) 6px,
+    rgba(0, 255, 65, 0.4) 6px,
+    rgba(0, 255, 65, 0.4) 12px
+  );
+  background-size: 20px 20px;
+  animation: progress-stripe 0.6s linear infinite;
+}
+
+/* Fade-in entrance */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up {
+  animation: fade-in-up 0.3s ease-out both;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in {
+  animation: fade-in 0.3s ease-out both;
+}
+
+/* Stagger entrance */
+.stagger > * {
+  animation: fade-in-up 0.3s ease-out both;
+}
+
+/* Card hover lift */
+.card-lift {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px -4px rgba(0, 255, 65, 0.2);
+}
+
+/* Tab content transition */
+[data-state="active"][role="tabpanel"] {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Source attribution chip — cyan terminal style */
+.attr-chip {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--hack-cyan);
+  border: 1px solid rgba(0, 255, 255, 0.25);
+  background: rgba(0, 255, 255, 0.05);
+  padding: 1px 6px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.attr-chip:hover {
+  background: rgba(0, 255, 255, 0.15);
+  border-color: var(--hack-cyan);
+  box-shadow: var(--hack-glow-cyan);
+  text-decoration: none;
+}
+
+/* Mark highlight — green */
+mark {
+  background: rgba(0, 255, 65, 0.25);
+  color: var(--hack-green);
+  border-radius: 1px;
+  padding: 0 2px;
+}
+
+/* ============================================
+   LIGHT THEME OVERRIDES (dark-first design)
+   ============================================ */
+.light .bg-black\/40 {
+  background-color: oklch(0.92 0.002 145) !important;
+}
+.light .bg-black\/30 {
+  background-color: oklch(0.94 0.002 145) !important;
+}
+.light .bg-black\/20 {
+  background-color: oklch(0.95 0.002 145) !important;
+}
+.light .border-white\/10 {
+  border-color: oklch(0.85 0.002 145) !important;
+}
+.light .border-white\/5 {
+  border-color: oklch(0.90 0.002 145) !important;
+}
+
+/* Print styles */
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  .no-print { display: none !important; }
+}
+
+/* Reduced motion — respect user accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* Auto-generated opacity utility classes for hack color CSS variables */
+/* Tailwind v3 doesn't support opacity modifiers on arbitrary values like bg-[var(--hack-green)]/5 */
+/* These classes provide that functionality using rgba() with -rgb companion variables */
+@layer utilities {
+  .bg-\[var\(--hack-amber\)\]\/10 {
+    background-color: rgba(var(--hack-amber-rgb), 0.10);
+  }
+  .bg-\[var\(--hack-amber\)\]\/5 {
+    background-color: rgba(var(--hack-amber-rgb), 0.05);
+  }
+  .bg-\[var\(--hack-bg\)\]\/60 {
+    background-color: rgba(var(--hack-bg-rgb), 0.60);
+  }
+  .bg-\[var\(--hack-bg\)\]\/80 {
+    background-color: rgba(var(--hack-bg-rgb), 0.80);
+  }
+  .bg-\[var\(--hack-bg\)\]\/90 {
+    background-color: rgba(var(--hack-bg-rgb), 0.90);
+  }
+  .bg-\[var\(--hack-bg\)\]\/95 {
+    background-color: rgba(var(--hack-bg-rgb), 0.95);
+  }
+  .bg-\[var\(--hack-border\)\]\/30 {
+    background-color: rgba(var(--hack-border-rgb), 0.30);
+  }
+  .bg-\[var\(--hack-cyan\)\]\/10 {
+    background-color: rgba(var(--hack-cyan-rgb), 0.10);
+  }
+  .bg-\[var\(--hack-cyan\)\]\/20 {
+    background-color: rgba(var(--hack-cyan-rgb), 0.20);
+  }
+  .bg-\[var\(--hack-cyan\)\]\/40 {
+    background-color: rgba(var(--hack-cyan-rgb), 0.40);
+  }
+  .bg-\[var\(--hack-cyan\)\]\/5 {
+    background-color: rgba(var(--hack-cyan-rgb), 0.05);
+  }
+  .bg-\[var\(--hack-gray\)\]\/40 {
+    background-color: rgba(var(--hack-gray-rgb), 0.40);
+  }
+  .bg-\[var\(--hack-green\)\]\/10 {
+    background-color: rgba(var(--hack-green-rgb), 0.10);
+  }
+  .bg-\[var\(--hack-green\)\]\/15 {
+    background-color: rgba(var(--hack-green-rgb), 0.15);
+  }
+  .bg-\[var\(--hack-green\)\]\/20 {
+    background-color: rgba(var(--hack-green-rgb), 0.20);
+  }
+  .bg-\[var\(--hack-green\)\]\/30 {
+    background-color: rgba(var(--hack-green-rgb), 0.30);
+  }
+  .bg-\[var\(--hack-green\)\]\/40 {
+    background-color: rgba(var(--hack-green-rgb), 0.40);
+  }
+  .bg-\[var\(--hack-green\)\]\/5 {
+    background-color: rgba(var(--hack-green-rgb), 0.05);
+  }
+  .bg-\[var\(--hack-orange\)\]\/10 {
+    background-color: rgba(var(--hack-orange-rgb), 0.10);
+  }
+  .bg-\[var\(--hack-orange\)\]\/5 {
+    background-color: rgba(var(--hack-orange-rgb), 0.05);
+  }
+  .bg-\[var\(--hack-purple\)\]\/10 {
+    background-color: rgba(var(--hack-purple-rgb), 0.10);
+  }
+  .bg-\[var\(--hack-purple\)\]\/5 {
+    background-color: rgba(var(--hack-purple-rgb), 0.05);
+  }
+  .bg-\[var\(--hack-red\)\]\/10 {
+    background-color: rgba(var(--hack-red-rgb), 0.10);
+  }
+  .bg-\[var\(--hack-red\)\]\/15 {
+    background-color: rgba(var(--hack-red-rgb), 0.15);
+  }
+  .bg-\[var\(--hack-red\)\]\/20 {
+    background-color: rgba(var(--hack-red-rgb), 0.20);
+  }
+  .bg-\[var\(--hack-red\)\]\/40 {
+    background-color: rgba(var(--hack-red-rgb), 0.40);
+  }
+  .bg-\[var\(--hack-red\)\]\/5 {
+    background-color: rgba(var(--hack-red-rgb), 0.05);
+  }
+  .border-\[var\(--hack-amber\)\]\/20 {
+    border-color: rgba(var(--hack-amber-rgb), 0.20);
+  }
+  .border-\[var\(--hack-amber\)\]\/30 {
+    border-color: rgba(var(--hack-amber-rgb), 0.30);
+  }
+  .border-\[var\(--hack-amber\)\]\/40 {
+    border-color: rgba(var(--hack-amber-rgb), 0.40);
+  }
+  .border-\[var\(--hack-border\)\]\/20 {
+    border-color: rgba(var(--hack-border-rgb), 0.20);
+  }
+  .border-\[var\(--hack-border\)\]\/30 {
+    border-color: rgba(var(--hack-border-rgb), 0.30);
+  }
+  .border-\[var\(--hack-border\)\]\/50 {
+    border-color: rgba(var(--hack-border-rgb), 0.50);
+  }
+  .border-\[var\(--hack-cyan\)\]\/10 {
+    border-color: rgba(var(--hack-cyan-rgb), 0.10);
+  }
+  .border-\[var\(--hack-cyan\)\]\/20 {
+    border-color: rgba(var(--hack-cyan-rgb), 0.20);
+  }
+  .border-\[var\(--hack-cyan\)\]\/30 {
+    border-color: rgba(var(--hack-cyan-rgb), 0.30);
+  }
+  .border-\[var\(--hack-cyan\)\]\/40 {
+    border-color: rgba(var(--hack-cyan-rgb), 0.40);
+  }
+  .border-\[var\(--hack-cyan\)\]\/50 {
+    border-color: rgba(var(--hack-cyan-rgb), 0.50);
+  }
+  .border-\[var\(--hack-green\)\]\/20 {
+    border-color: rgba(var(--hack-green-rgb), 0.20);
+  }
+  .border-\[var\(--hack-green\)\]\/30 {
+    border-color: rgba(var(--hack-green-rgb), 0.30);
+  }
+  .border-\[var\(--hack-green\)\]\/40 {
+    border-color: rgba(var(--hack-green-rgb), 0.40);
+  }
+  .border-\[var\(--hack-green\)\]\/50 {
+    border-color: rgba(var(--hack-green-rgb), 0.50);
+  }
+  .border-\[var\(--hack-green\)\]\/60 {
+    border-color: rgba(var(--hack-green-rgb), 0.60);
+  }
+  .border-\[var\(--hack-orange\)\]\/30 {
+    border-color: rgba(var(--hack-orange-rgb), 0.30);
+  }
+  .border-\[var\(--hack-orange\)\]\/40 {
+    border-color: rgba(var(--hack-orange-rgb), 0.40);
+  }
+  .border-\[var\(--hack-purple\)\]\/30 {
+    border-color: rgba(var(--hack-purple-rgb), 0.30);
+  }
+  .border-\[var\(--hack-purple\)\]\/40 {
+    border-color: rgba(var(--hack-purple-rgb), 0.40);
+  }
+  .border-\[var\(--hack-red\)\]\/20 {
+    border-color: rgba(var(--hack-red-rgb), 0.20);
+  }
+  .border-\[var\(--hack-red\)\]\/30 {
+    border-color: rgba(var(--hack-red-rgb), 0.30);
+  }
+  .border-\[var\(--hack-red\)\]\/40 {
+    border-color: rgba(var(--hack-red-rgb), 0.40);
+  }
+  .border-\[var\(--hack-red\)\]\/50 {
+    border-color: rgba(var(--hack-red-rgb), 0.50);
+  }
+  .hover\:bg-\[var\(--hack-amber\)\]\/15:hover {
+    background-color: rgba(var(--hack-amber-rgb), 0.15);
+  }
+  .hover\:bg-\[var\(--hack-amber\)\]\/5:hover {
+    background-color: rgba(var(--hack-amber-rgb), 0.05);
+  }
+  .hover\:bg-\[var\(--hack-cyan\)\]\/10:hover {
+    background-color: rgba(var(--hack-cyan-rgb), 0.10);
+  }
+  .hover\:bg-\[var\(--hack-cyan\)\]\/15:hover {
+    background-color: rgba(var(--hack-cyan-rgb), 0.15);
+  }
+  .hover\:bg-\[var\(--hack-cyan\)\]\/20:hover {
+    background-color: rgba(var(--hack-cyan-rgb), 0.20);
+  }
+  .hover\:bg-\[var\(--hack-cyan\)\]\/5:hover {
+    background-color: rgba(var(--hack-cyan-rgb), 0.05);
+  }
+  .hover\:bg-\[var\(--hack-green\)\]\/10:hover {
+    background-color: rgba(var(--hack-green-rgb), 0.10);
+  }
+  .hover\:bg-\[var\(--hack-green\)\]\/15:hover {
+    background-color: rgba(var(--hack-green-rgb), 0.15);
+  }
+  .hover\:bg-\[var\(--hack-green\)\]\/20:hover {
+    background-color: rgba(var(--hack-green-rgb), 0.20);
+  }
+  .hover\:bg-\[var\(--hack-green\)\]\/30:hover {
+    background-color: rgba(var(--hack-green-rgb), 0.30);
+  }
+  .hover\:bg-\[var\(--hack-green\)\]\/5:hover {
+    background-color: rgba(var(--hack-green-rgb), 0.05);
+  }
+  .hover\:bg-\[var\(--hack-purple\)\]\/5:hover {
+    background-color: rgba(var(--hack-purple-rgb), 0.05);
+  }
+  .hover\:bg-\[var\(--hack-red\)\]\/10:hover {
+    background-color: rgba(var(--hack-red-rgb), 0.10);
+  }
+  .hover\:bg-\[var\(--hack-red\)\]\/15:hover {
+    background-color: rgba(var(--hack-red-rgb), 0.15);
+  }
+  .hover\:bg-\[var\(--hack-red\)\]\/20:hover {
+    background-color: rgba(var(--hack-red-rgb), 0.20);
+  }
+  .hover\:bg-\[var\(--hack-red\)\]\/5:hover {
+    background-color: rgba(var(--hack-red-rgb), 0.05);
+  }
+  .hover\:border-\[var\(--hack-amber\)\]\/40:hover {
+    border-color: rgba(var(--hack-amber-rgb), 0.40);
+  }
+  .hover\:border-\[var\(--hack-cyan\)\]\/30:hover {
+    border-color: rgba(var(--hack-cyan-rgb), 0.30);
+  }
+  .hover\:border-\[var\(--hack-cyan\)\]\/40:hover {
+    border-color: rgba(var(--hack-cyan-rgb), 0.40);
+  }
+  .hover\:border-\[var\(--hack-cyan\)\]\/50:hover {
+    border-color: rgba(var(--hack-cyan-rgb), 0.50);
+  }
+  .hover\:border-\[var\(--hack-green\)\]\/30:hover {
+    border-color: rgba(var(--hack-green-rgb), 0.30);
+  }
+  .hover\:border-\[var\(--hack-green\)\]\/40:hover {
+    border-color: rgba(var(--hack-green-rgb), 0.40);
+  }
+  .hover\:border-\[var\(--hack-green\)\]\/50:hover {
+    border-color: rgba(var(--hack-green-rgb), 0.50);
+  }
+  .hover\:border-\[var\(--hack-purple\)\]\/40:hover {
+    border-color: rgba(var(--hack-purple-rgb), 0.40);
+  }
+  .hover\:border-\[var\(--hack-red\)\]\/40:hover {
+    border-color: rgba(var(--hack-red-rgb), 0.40);
+  }
+  .text-\[var\(--hack-amber\)\]\/50 {
+    color: rgba(var(--hack-amber-rgb), 0.50);
+  }
+  .text-\[var\(--hack-amber\)\]\/60 {
+    color: rgba(var(--hack-amber-rgb), 0.60);
+  }
+  .text-\[var\(--hack-amber\)\]\/70 {
+    color: rgba(var(--hack-amber-rgb), 0.70);
+  }
+  .text-\[var\(--hack-amber\)\]\/80 {
+    color: rgba(var(--hack-amber-rgb), 0.80);
+  }
+  .text-\[var\(--hack-cyan\)\]\/40 {
+    color: rgba(var(--hack-cyan-rgb), 0.40);
+  }
+  .text-\[var\(--hack-cyan\)\]\/50 {
+    color: rgba(var(--hack-cyan-rgb), 0.50);
+  }
+  .text-\[var\(--hack-cyan\)\]\/60 {
+    color: rgba(var(--hack-cyan-rgb), 0.60);
+  }
+  .text-\[var\(--hack-cyan\)\]\/70 {
+    color: rgba(var(--hack-cyan-rgb), 0.70);
+  }
+  .text-\[var\(--hack-cyan\)\]\/80 {
+    color: rgba(var(--hack-cyan-rgb), 0.80);
+  }
+  .text-\[var\(--hack-cyan\)\]\/90 {
+    color: rgba(var(--hack-cyan-rgb), 0.90);
+  }
+  .text-\[var\(--hack-gray\)\]\/30 {
+    color: rgba(var(--hack-gray-rgb), 0.30);
+  }
+  .text-\[var\(--hack-gray\)\]\/40 {
+    color: rgba(var(--hack-gray-rgb), 0.40);
+  }
+  .text-\[var\(--hack-gray\)\]\/50 {
+    color: rgba(var(--hack-gray-rgb), 0.50);
+  }
+  .text-\[var\(--hack-gray\)\]\/60 {
+    color: rgba(var(--hack-gray-rgb), 0.60);
+  }
+  .text-\[var\(--hack-gray\)\]\/70 {
+    color: rgba(var(--hack-gray-rgb), 0.70);
+  }
+  .text-\[var\(--hack-gray\)\]\/80 {
+    color: rgba(var(--hack-gray-rgb), 0.80);
+  }
+  .text-\[var\(--hack-gray\)\]\/90 {
+    color: rgba(var(--hack-gray-rgb), 0.90);
+  }
+  .text-\[var\(--hack-green\)\]\/30 {
+    color: rgba(var(--hack-green-rgb), 0.30);
+  }
+  .text-\[var\(--hack-green\)\]\/40 {
+    color: rgba(var(--hack-green-rgb), 0.40);
+  }
+  .text-\[var\(--hack-green\)\]\/50 {
+    color: rgba(var(--hack-green-rgb), 0.50);
+  }
+  .text-\[var\(--hack-green\)\]\/60 {
+    color: rgba(var(--hack-green-rgb), 0.60);
+  }
+  .text-\[var\(--hack-green\)\]\/70 {
+    color: rgba(var(--hack-green-rgb), 0.70);
+  }
+  .text-\[var\(--hack-green\)\]\/80 {
+    color: rgba(var(--hack-green-rgb), 0.80);
+  }
+  .text-\[var\(--hack-purple\)\]\/50 {
+    color: rgba(var(--hack-purple-rgb), 0.50);
+  }
+  .text-\[var\(--hack-purple\)\]\/60 {
+    color: rgba(var(--hack-purple-rgb), 0.60);
+  }
+  .text-\[var\(--hack-purple\)\]\/70 {
+    color: rgba(var(--hack-purple-rgb), 0.70);
+  }
+  .text-\[var\(--hack-red\)\]\/60 {
+    color: rgba(var(--hack-red-rgb), 0.60);
+  }
+  .text-\[var\(--hack-red\)\]\/70 {
+    color: rgba(var(--hack-red-rgb), 0.70);
+  }
+  .text-\[var\(--hack-red\)\]\/80 {
+    color: rgba(var(--hack-red-rgb), 0.80);
+  }
+}

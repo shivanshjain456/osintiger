@@ -1,0 +1,936 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// OSINTiger — persisted investigation history (survives dev server restarts)
+model Investigation {
+  id            String   @id
+  target        String
+  inputType     String
+  language      String
+  script        String
+  modules       String   @default("[]")
+  status        String   @default("queued")
+  createdAt     DateTime @default(now())
+  completedAt   DateTime?
+  currentStep   Int      @default(0)
+  totalSteps    Int      @default(8)
+  stepsJson     String   @default("[]")
+  sourceResults String   @default("[]")
+  reportJson    String?
+  error         String?
+  cacheExpiresAt DateTime
+  starred       Boolean  @default(false)
+  tags          String   @default("[]") // JSON array of tag strings
+  notes         String   @default("")
+  bookmarkedFindings String @default("[]") // JSON array of bookmarked finding indices
+  findingAnnotations String @default("{}") // JSON map of finding index -> annotation text
+
+  @@index([createdAt])
+  @@index([target])
+  @@index([status])
+  @@index([starred])
+  @@index([inputType])
+}
+
+// Autonomous Investigation Agent — persistent state for the recursive agent.
+// Stores the full agent state (discovered entities, evidence, frontier, trace) as JSON.
+// This is separate from the fixed-pipeline Investigation model because the agent has
+// a fundamentally different lifecycle (iterative vs. sequential) and state shape.
+model AutonomousInvestigation {
+  id             String   @id
+  objective      String
+  target         String
+  inputType      String
+  configJson     String   @default("{}")  // AgentConfig JSON
+  stateJson      String   @default("{}")  // AgentState JSON (entities, evidence, frontier, trace)
+  status         String   @default("queued")  // queued | running | completed | failed | stopped
+  iterations     Int      @default(0)
+  entitiesCount  Int      @default(0)
+  evidenceCount  Int      @default(0)
+  actionsCount   Int      @default(0)
+  reportJson     String?  // Final synthesized ReportData (when complete)
+  error          String?
+  createdAt      DateTime @default(now())
+  completedAt    DateTime?
+  cacheExpiresAt DateTime
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([target])
+}
+
+// Recursive Discovery Session — persistent state for the recursive discovery engine.
+model DiscoverySession {
+  id             String   @id
+  rootTarget     String
+  rootType       String
+  configJson     String   @default("{}")  // DiscoveryConfig JSON
+  stateJson      String   @default("{}")  // DiscoveryState JSON (tree, entities, trace)
+  status         String   @default("queued")  // queued | running | completed | failed | stopped
+  entitiesCount  Int      @default(0)
+  expandedCount  Int      @default(0)
+  maxDepthReached Int     @default(0)
+  error          String?
+  createdAt      DateTime @default(now())
+  completedAt    DateTime?
+  cacheExpiresAt DateTime
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([rootTarget])
+}
+
+// AI Investigation Plan Session — persistent state for AI-planned investigations.
+model PlanSession {
+  id             String   @id
+  objective      String
+  target         String
+  inputType      String
+  configJson     String   @default("{}")  // PlanConfig JSON
+  stateJson      String   @default("{}")  // PlanState JSON (plan, evidence, entities, report)
+  status         String   @default("planning")  // planning | executing | completed | failed
+  currentStep    Int      @default(0)
+  totalSteps     Int      @default(0)
+  evidenceCount  Int      @default(0)
+  entityCount    Int      @default(0)
+  reportJson     String?  // Final synthesized ReportData
+  error          String?
+  createdAt      DateTime @default(now())
+  completedAt    DateTime?
+  cacheExpiresAt DateTime
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([target])
+}
+
+// Live Monitoring Session — continuous change detection across 7 source categories.
+// Stores snapshots, alerts, and comparison state for ongoing monitoring.
+model MonitorSession {
+  id             String   @id
+  target         String
+  inputType      String
+  configJson     String   @default("{}")  // MonitorConfig JSON
+  stateJson      String   @default("{}")  // MonitorState JSON (snapshots, alerts, baselines)
+  status         String   @default("active")  // active | paused | stopped
+  snapshotCount  Int      @default(0)
+  alertCount     Int      @default(0)
+  lastScanAt     DateTime?
+  error          String?
+  createdAt      DateTime @default(now())
+  cacheExpiresAt DateTime
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([target])
+}
+
+// ============================================================================
+// KNOWLEDGE BASE — durable intelligence repository (Feature 19)
+// Preserves investigations, entities, relationships, evidence, and history
+// across runs so prior work can be searched, reused, and extended.
+// ============================================================================
+
+// KB Entity — a normalized real-world subject (person/org/domain/ip/etc.)
+// accumulated across investigations. Stable identity that grows over time.
+model KBEntity {
+  id              String   @id
+  type            String   // person | organization | domain | ip | email | username | wallet | phone | url | hash | cve | document
+  primaryName     String
+  normalizedName  String
+  aliasesJson     String   @default("[]")  // JSON array of alias strings
+  attributesJson  String   @default("{}")  // JSON map of attribute -> value
+  confidence      Float    @default(0.5)
+  tier            Int      @default(2)     // highest source reliability tier observed
+  status          String   @default("active")  // active | merged | deprecated
+  mergedIntoId    String?  // if status=merged, the canonical entity this was merged into
+  firstSeenAt     DateTime @default(now())
+  lastSeenAt      DateTime @default(now())
+  observationCount Int     @default(1)     // how many evidence points reference this
+  investigationCount Int   @default(1)     // how many distinct investigations contributed
+  version         Int      @default(1)     // bumped on every meaningful update
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  @@index([type])
+  @@index([normalizedName])
+  @@index([status])
+  @@index([lastSeenAt])
+  @@index([primaryName])
+}
+
+// KB Relationship — structured edge between two KBEntities.
+// Preserves connections discovered across investigations.
+model KBRelationship {
+  id              String   @id
+  fromEntityId    String
+  toEntityId      String
+  relationType    String   // owns | affiliated_with | resolves_to | links_to | mentions | employed_by | located_in | related_to | etc.
+  label           String   @default("")
+  confidence      Float    @default(0.5)
+  tier            Int      @default(2)
+  sourceKey       String   @default("")
+  sourceLabel     String   @default("")
+  sourceUrl       String   @default("")
+  firstSeenAt     DateTime @default(now())
+  lastSeenAt      DateTime @default(now())
+  observationCount Int     @default(1)
+  investigationCount Int   @default(1)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  @@index([fromEntityId])
+  @@index([toEntityId])
+  @@index([relationType])
+  @@index([lastSeenAt])
+}
+
+// KB Evidence — provenance artifact linking entities/relationships to sources.
+// Every meaningful record must be traceable back to its source evidence.
+model KBEvidence {
+  id              String   @id
+  entityId        String?
+  relationshipId  String?
+  investigationId String   @default("")
+  investigationKind String @default("standard")  // standard | agent | discovery | plan | monitor
+  sourceKey       String   @default("")
+  sourceLabel     String   @default("")
+  sourceUrl       String   @default("")
+  tier            Int      @default(2)
+  rawText         String   @default("")
+  normalizedText  String   @default("")
+  confidence      Float    @default(0.5)
+  observedAt      DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@index([entityId])
+  @@index([relationshipId])
+  @@index([investigationId])
+  @@index([sourceKey])
+  @@index([observedAt])
+}
+
+// KB Version — historical snapshot of an entity or relationship.
+// Preserves prior states so analysts can track evolution over time
+// instead of overwriting changes destructively.
+model KBVersion {
+  id              String   @id
+  entityType      String   // entity | relationship
+  recordId        String
+  versionNumber   Int
+  snapshotJson    String   @default("{}")  // full snapshot of the record at this version
+  validFrom       DateTime @default(now())
+  validTo         DateTime?
+  changeType      String   @default("create")  // create | update | merge | split | deprecate
+  changeReason    String   @default("")
+  investigationId String   @default("")
+  createdAt       DateTime @default(now())
+
+  @@index([recordId])
+  @@index([entityType])
+  @@index([changeType])
+  @@index([createdAt])
+}
+
+// KB Conflict — records where sources disagree on a fact about an entity.
+// Both sides are preserved; the repository never destroys either prematurely.
+model KBConflict {
+  id              String   @id
+  entityId        String
+  field           String   // the disputed attribute (e.g., "location", "owner")
+  valueA          String
+  valueB          String
+  evidenceAId     String   @default("")
+  evidenceBId     String   @default("")
+  sourceKeyA      String   @default("")
+  sourceKeyB      String   @default("")
+  status          String   @default("open")  // open | resolved_a | resolved_b | unresolved
+  resolution      String   @default("")
+  detectedAt      DateTime @default(now())
+  resolvedAt      DateTime?
+  createdAt       DateTime @default(now())
+
+  @@index([entityId])
+  @@index([status])
+  @@index([field])
+}
+
+// KB Investigation Link — provenance: which investigation contributed to
+// which entity/relationship. Enables "show me everything from investigation X"
+// and "which investigations have touched entity Y?"
+model KBInvestigationLink {
+  id              String   @id
+  investigationId String
+  investigationKind String @default("standard")  // standard | agent | discovery | plan | monitor
+  entityId        String?
+  relationshipId  String?
+  contributionType String  @default("observed")  // observed | confirmed | contradicted | updated
+  target          String   @default("")
+  timestamp       DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@index([investigationId])
+  @@index([entityId])
+  @@index([relationshipId])
+  @@index([timestamp])
+}
+
+// ============================================================================
+// PROVENANCE — immutable evidence chain (Feature 25)
+// Every piece of intelligence is traceable back to its origin with full
+// audit metadata: collector, tool, timestamp, query, source URL, raw response,
+// normalized data, confidence, relationships, and compliance info.
+// ============================================================================
+
+model ProvenanceEvent {
+  id              String   @id
+  investigationId String   @default("")
+  evidenceId      String   @default("")  // logical evidence ID (findings, relationships, report claims)
+  parentEventId   String?                 // for derived evidence — links to upstream event
+  eventType       String   // collection | normalization | scoring | synthesis | reporting | enrichment | correlation | entity_resolution | re_scoring | correction
+  eventTime       DateTime @default(now()) // when the event occurred
+  
+  // Collector
+  collectorName   String   @default("")  // subsystem/agent/module that acquired evidence
+  collectionMethod String  @default("")  // crawler | api_client | parser | enrichment | manual | ai_extraction
+  executionContext String  @default("{}") // JSON: investigationId, jobId, runId, taskId
+  collectorVersion String  @default("")  // version of collector logic
+  
+  // Tool
+  toolName        String   @default("")  // exact tool/library/service used
+  toolVersion     String   @default("")  // tool version
+  toolConfig      String   @default("{}") // JSON: configuration profile, runtime params
+  toolMode        String   @default("")  // sync | async | batch | streaming
+  toolLimitations String   @default("")  // known limitations, parsing assumptions
+  
+  // Timestamp
+  collectedAt     DateTime @default(now()) // when evidence was collected (UTC)
+  sourceObservedAt DateTime?               // when source itself was last modified
+  ingestedAt      DateTime @default(now()) // when evidence entered the system
+  normalizedAt    DateTime?                // when evidence was normalized
+  scoredAt        DateTime?                // when confidence was assigned
+  
+  // Query
+  queryString     String   @default("")  // exact query/search term/API request
+  queryParams     String   @default("{}") // JSON: pagination, headers, selectors, filters
+  investigationContext String @default("") // user objective that motivated the query
+  queryNormalized String   @default("")  // normalized query representation
+  
+  // Source URL
+  sourceUrl       String   @default("")  // canonical URL/endpoint/document reference
+  sourceUrls      String   @default("[]") // JSON array: multiple source references
+  sourceType      String   @default("")  // primary | secondary | mirror | archive | cached
+  canonicalization String  @default("")  // redirects/canonicalization rules applied
+  
+  // Raw response
+  rawPayload      String   @default("")  // original unmodified payload (truncated if large)
+  rawHash         String   @default("")  // SHA-256 hash of raw content for tamper detection
+  rawSize         Int      @default(0)   // size of raw payload in bytes
+  rawTruncated    Boolean  @default(false) // true if raw was truncated
+  rawOmissionReason String @default("")  // reason if raw couldn't be stored
+  
+  // Normalized data
+  normalizedData  String   @default("{}") // JSON: structured, cleaned representation
+  transformationSteps String @default("[]") // JSON array: steps applied during normalization
+  fieldMappings   String   @default("{}") // JSON: raw field → normalized field mapping
+  normalizationVersion String @default("") // version of normalization logic
+  
+  // Confidence
+  confidence      Float    @default(0.5) // confidence score (0-1)
+  confidenceRationale String @default("") // why this confidence was assigned
+  rawConfidence   Float    @default(0.5) // confidence of raw observation
+  normalizedConfidence Float @default(0.5) // confidence of normalized interpretation
+  confidencePropagation String @default("{}") // JSON: how confidence propagates upstream
+  
+  // Relationships
+  derivedEntities String   @default("[]") // JSON: entities derived from this evidence
+  derivedRelationships String @default("[]") // JSON: relationships derived
+  corroboratingEvidence String @default("[]") // JSON: evidence IDs that corroborate
+  contradictingEvidence String @default("[]") // JSON: evidence IDs that contradict
+  
+  // Audit metadata
+  actorId         String   @default("")  // user/agent/system actor
+  actorType       String   @default("system") // system | agent | user | api
+  accessContext   String   @default("{}") // JSON: permissions, tenancy, auth scope
+  processingStatus String  @default("active") // active | deprecated | redacted | deleted
+  retentionPolicy String   @default("")  // retention policy applied
+  integrityHash   String   @default("")  // hash for tamper evidence
+  retryCount      Int      @default(0)   // number of retries
+  errorState      String   @default("")  // error if any
+  latencyMs       Int      @default(0)   // collection latency
+  pipelineStage   String   @default("")  // which pipeline stage produced this
+  
+  // Immutable audit trail
+  createdAt       DateTime @default(now())
+  
+  @@index([investigationId])
+  @@index([evidenceId])
+  @@index([eventType])
+  @@index([collectorName])
+  @@index([toolName])
+  @@index([collectedAt])
+  @@index([sourceUrl])
+  @@index([confidence])
+  @@index([parentEventId])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// LLM PROVIDER CREDENTIALS — BYO-LLM (Bring Your Own AI Agent)
+// Stores user-configured LLM provider credentials for routing AI calls.
+// Credentials are encrypted at rest using AES-256-GCM.
+// ============================================================================
+
+model LLMProviderConfig {
+  id              String   @id
+  provider        String   // "openai" | "anthropic" | "default"
+  apiKey          String   // AES-256-GCM encrypted API key
+  model           String   @default("") // e.g., "gpt-4o", "claude-3-5-sonnet-20241022"
+  baseUrl         String   @default("") // optional custom base URL for proxy/self-hosted
+  isActive        Boolean  @default(true)
+  isValidated     Boolean  @default(false)
+  lastValidatedAt DateTime?
+  lastUsedAt      DateTime?
+  usageCount      Int      @default(0)
+  lastError       String   @default("")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  @@index([provider])
+  @@index([isActive])
+}
+
+// ============================================================================
+// AUDIT LOG — immutable record of every meaningful system & user action.
+// Powers the /audit route. Every investigation start, config change, export,
+// deletion, and API-key operation is recorded here for compliance & forensics.
+// ============================================================================
+
+model AuditLog {
+  id              String   @id
+  timestamp       DateTime @default(now())
+  actorType       String   @default("system") // system | agent | user | api | scheduler
+  actorId         String   @default("")       // user id / agent id / subsystem name
+  action          String   // investigate.start | config.update | export.run | delete | ...
+  category        String   @default("general") // investigation | config | data | auth | system | export
+  resourceType    String   @default("")       // investigation | entity | llm_config | collection | ...
+  resourceId      String   @default("")
+  targetType      String   @default("")       // the OSINT target (if applicable)
+  detail          String   @default("")       // human-readable summary
+  metadataJson    String   @default("{}")     // JSON: structured context (before/after, params)
+  severity        String   @default("info")   // info | warning | error | critical
+  ipAddress       String   @default("")
+  userAgent       String   @default("")
+  sessionId       String   @default("")
+  outcome         String   @default("success") // success | failure | partial
+  durationMs      Int      @default(0)
+
+  @@index([timestamp])
+  @@index([actorType])
+  @@index([action])
+  @@index([category])
+  @@index([resourceType, resourceId])
+  @@index([severity])
+}
+
+// ============================================================================
+// NOTIFICATIONS — user-facing alerts (investigation complete, monitor alert,
+// gap detected, conflict found, etc.). Shown in the /notifications center.
+// ============================================================================
+
+model Notification {
+  id              String   @id
+  type            String   // investigation.complete | monitor.alert | kb.conflict | system.maintenance | ...
+  title           String
+  body            String   @default("")
+  severity        String   @default("info") // info | success | warning | error
+  category        String   @default("general") // investigation | monitor | kb | system | security
+  resourceType    String   @default("") // investigation | entity | monitor | ...
+  resourceId      String   @default("")
+  routeName       String   @default("") // SPA route name to navigate to on click
+  routeParamsJson String   @default("{}") // JSON: route params for deep-link
+  isRead          Boolean  @default(false)
+  isStarred       Boolean  @default(false)
+  isArchived      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  readAt          DateTime?
+
+  @@index([createdAt])
+  @@index([isRead])
+  @@index([type])
+  @@index([category])
+  @@index([resourceType, resourceId])
+}
+
+// ============================================================================
+// COLLECTIONS & SAVED SEARCHES — analyst-curated groups of investigations,
+// entities, or findings. Supports folders, saved queries, and sharing.
+// ============================================================================
+
+model Collection {
+  id              String   @id
+  name            String
+  description     String   @default("")
+  color           String   @default("")     // accent color (tailwind name or hex)
+  icon            String   @default("Folder") // lucide icon name
+  type            String   @default("manual") // manual | saved_search | smart
+  queryJson       String   @default("{}")   // for saved_search/smart: the query definition
+  itemCount       Int      @default(0)
+  isShared        Boolean  @default(false)
+  isPinned        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  @@index([type])
+  @@index([isPinned])
+  @@index([updatedAt])
+}
+
+model CollectionItem {
+  id              String   @id
+  collectionId    String
+  itemType        String   // investigation | entity | finding | bookmark
+  itemId          String
+  note            String   @default("")
+  addedAt         DateTime @default(now())
+
+  @@index([collectionId])
+  @@index([itemType, itemId])
+}
+
+// ============================================================================
+// SOURCE API KEYS — user-provided API keys for OSINT sources that support
+// authenticated higher rate limits (Shodan, VirusTotal, Etherscan, etc.).
+// Keys are encrypted at rest. Powers the /settings/api-keys route.
+// ============================================================================
+
+model SourceApiKey {
+  id              String   @id
+  sourceKey       String   // e.g. "shodan", "virustotal", "etherscan"
+  sourceLabel     String   // human-readable
+  apiKey          String   // AES-256-GCM encrypted
+  isActive        Boolean  @default(true)
+  isValidated     Boolean  @default(false)
+  lastValidatedAt DateTime?
+  lastUsedAt      DateTime?
+  usageCount      Int      @default(0)
+  lastError       String   @default("")
+  docsUrl         String   @default("")   // where to obtain a key
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  @@index([sourceKey])
+  @@index([isActive])
+}
+
+// ============================================================================
+// SYSTEM METRICS — time-series snapshots of system health & usage counters.
+// Powers /system/metrics and /system/status dashboards.
+// ============================================================================
+
+model SystemMetric {
+  id              String   @id
+  timestamp       DateTime @default(now())
+  metric          String   // investigations.total | sources.success_rate | cache.size | api.latency.p95 | ...
+  value           Float
+  unit            String   @default("")   // count | ms | bytes | percent
+  tagsJson        String   @default("{}") // JSON: dimensional tags (source, endpoint, ...)
+
+  @@index([timestamp])
+  @@index([metric])
+  @@index([metric, timestamp])
+}
+
+// ============================================================================
+// BACKGROUND JOBS — track async work items (investigations, agent runs,
+// monitor scans, exports, KB ingestion). Powers /system/queues & /system/scheduler.
+// ============================================================================
+
+model BackgroundJob {
+  id              String   @id
+  jobType         String   // investigation | agent | discovery | plan | monitor | export | kb_ingest | analytics
+  resourceId      String   @default("")   // the investigation/agent/etc id
+  resourceType    String   @default("")
+  status          String   @default("queued") // queued | running | completed | failed | cancelled | retried
+  priority        Int      @default(5)    // 1 (low) - 15 (very high)
+  attempts        Int      @default(0)
+  maxAttempts     Int      @default(3)
+  progress        Int      @default(0)    // 0-100
+  payloadJson     String   @default("{}") // input
+  resultJson      String   @default("{}") // output
+  error           String   @default("")
+  queuedAt        DateTime @default(now())
+  startedAt       DateTime?
+  completedAt     DateTime?
+  durationMs      Int      @default(0)
+
+  @@index([status])
+  @@index([jobType])
+  @@index([priority])
+  @@index([queuedAt])
+  @@index([resourceType, resourceId])
+}
+
+// ============================================================================
+// USER PREFERENCES — per-browser preference store (theme, default mode,
+// density, etc.). Stored server-side keyed by an anonymous client id so
+// preferences survive across devices when the same client id is used.
+// ============================================================================
+
+model UserPreference {
+  id              String   @id
+  clientId        String   // anonymous per-browser id (from localStorage)
+  key             String   // theme | density | defaultMode | autoStart | ...
+  value           String
+  updatedAt       DateTime @default(now())
+
+  @@unique([clientId, key])
+  @@index([clientId])
+}
+
+// ============================================================================
+// FEEDBACK — user-submitted feedback / bug reports. Powers /feedback route.
+// ============================================================================
+
+model Feedback {
+  id              String   @id
+  kind            String   @default("feedback") // feedback | bug | feature | question
+  subject         String
+  body            String
+  routeName       String   @default("")   // where the user was when they submitted
+  contact         String   @default("")   // optional reply-to
+  severity        String   @default("normal") // low | normal | high | critical
+  status          String   @default("open") // open | acknowledged | resolved | closed
+  userAgent       String   @default("")
+  createdAt       DateTime @default(now())
+  resolvedAt      DateTime?
+
+  @@index([status])
+  @@index([kind])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// SAAS PLATFORM — Authentication, Organizations, Subscriptions, Billing,
+// Usage Metering, AI Credits, and API Access.
+// Transforms OSINTiger from an anonymous tool into a commercial SaaS platform.
+// ============================================================================
+
+// ─── NextAuth.js — user accounts, sessions, OAuth/email links ────────────────
+// Standard NextAuth v4 Prisma adapter models.
+
+model User {
+  id              String   @id            // Supabase Auth UID (primary identity)
+  supabaseUid     String   @default("")  // mirrored from id; indexed for lookups
+  name            String   @default("")
+  email           String   @unique
+  emailVerified   DateTime?
+  image           String   @default("")
+  hashedPassword  String   @default("")  // legacy (NextAuth); Supabase manages passwords now
+  stripeCustomerId String  @default("")  // linked Stripe customer
+  role            String   @default("user") // user | admin | owner
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+  lastLoginAt     DateTime?
+
+  accounts        Account[]
+  sessions        Session[]
+  subscriptions   Subscription[]
+  organizationMemberships OrganizationMember[]
+  usageRecords    UsageRecord[]
+  creditTransactions CreditTransaction[]
+  apiKeys         ApiKey[]
+
+  @@index([email])
+  @@index([stripeCustomerId])
+  @@index([role])
+}
+
+model Account {
+  id                String  @id
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  token      String   @unique
+  identifier String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Organizations — for Team & Enterprise plans (multi-seat workspaces) ────
+
+model Organization {
+  id              String   @id
+  name            String
+  slug            String   @unique
+  ownerId         String
+  stripeCustomerId String  @default("")
+  logoUrl         String   @default("")
+  settingsJson    String   @default("{}")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  members         OrganizationMember[]
+  subscriptions   Subscription[]
+  apiKeys         ApiKey[]
+
+  @@index([ownerId])
+  @@index([slug])
+}
+
+model OrganizationMember {
+  id              String   @id
+  organizationId  String
+  userId          String
+  role            String   @default("member") // owner | admin | member | viewer
+  invitedEmail    String   @default("")
+  status          String   @default("active") // active | invited | suspended
+  joinedAt        DateTime @default(now())
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@index([organizationId])
+}
+
+// ─── Subscription Plans — the commercial catalog (seeded on startup) ─────────
+// Each plan defines feature limits. Tiers: free | investigator | professional | team | enterprise
+
+model SubscriptionPlan {
+  id              String   @id
+  tier            String   @unique  // free | investigator | professional | team | enterprise
+  name            String
+  tagline         String   @default("")
+  description     String   @default("")
+  priceMonthly    Int      @default(0)   // cents USD
+  priceAnnual    Int      @default(0)    // cents USD (annual = ~2 months free)
+  currency        String   @default("usd")
+  stripePriceIdMonthly String @default("")
+  stripePriceIdAnnual   String @default("")
+  isPublic        Boolean  @default(true)
+  isFeatured      Boolean  @default(false)
+  sortOrder       Int      @default(0)
+  featuresJson    String   @default("{}")  // list of feature strings for marketing
+  limitsJson      String   @default("{}")  // structured limits (see below)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  subscriptions   Subscription[]
+
+  @@index([tier])
+  @@index([isPublic])
+}
+
+// limitsJson schema (JSON):
+// {
+//   "investigationsPerMonth": 3,
+//   "aiCreditsPerMonth": 10,
+//   "maxTargetsPerInvestigation": 1,
+//   "maxConcurrency": 1,
+//   "retentionDays": 7,
+//   "sources": "basic" | "all" | "all_priority",
+//   "modes": ["standard"] | ["standard","agent","discovery","plan","monitor"],
+//   "exports": ["none"] | ["markdown","json"] | ["markdown","json","pdf","csv","stix"],
+//   "apiAccess": false,
+//   "apiRequestsPerMonth": 0,
+//   "maxSeats": 1,
+//   "maxCollections": 3,
+//   "maxBookmarks": 25,
+//   "automationEnabled": false,
+//   "whiteLabelReports": false,
+//   "customSources": false,
+//   "ssoEnabled": false,
+//   "prioritySupport": false,
+//   "dedicatedCsm": false,
+//   "monitoringTargets": 0
+// }
+
+// ─── Subscriptions — a user's or org's active plan + Stripe linkage ──────────
+
+model Subscription {
+  id                  String   @id
+  userId              String?  // null if org-owned
+  organizationId      String?
+  planId              String
+  status              String   @default("active") // active | trialing | past_due | canceled | incomplete | paused
+  billingCycle        String   @default("monthly") // monthly | annual
+  stripeSubscriptionId String  @default("")
+  stripeCustomerId    String   @default("")
+  stripeItemId        String   @default("")
+  currentPeriodStart  DateTime?
+  currentPeriodEnd    DateTime?
+  cancelAtPeriodEnd   Boolean  @default(false)
+  canceledAt          DateTime?
+  trialEnd            DateTime?
+  quantity            Int      @default(1)  // seats for team plans
+  startedAt           DateTime @default(now())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now())
+
+  user                User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization        Organization?    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  plan                SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Restrict)
+
+  usageRecords        UsageRecord[]
+  creditTransactions  CreditTransaction[]
+  invoices            Invoice[]
+
+  @@index([userId])
+  @@index([organizationId])
+  @@index([status])
+  @@index([stripeSubscriptionId])
+}
+
+// ─── Usage Records — metered consumption tracking per billing period ─────────
+// One row per (subscription, period, metric). Incremented as users consume resources.
+
+model UsageRecord {
+  id              String   @id
+  subscriptionId  String
+  userId          String?
+  periodStart     DateTime
+  periodEnd       DateTime
+  metric          String   // investigations | ai_credits | api_requests | exports | vlm_analyses | monitor_scans
+  count           Int      @default(0)
+  limitForPeriod  Int      @default(0)  // snapshot of the plan limit (for fast UI)
+  updatedAt       DateTime @default(now())
+
+  subscription    Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  user            User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([subscriptionId, metric, periodStart])
+  @@index([subscriptionId])
+  @@index([periodStart, periodEnd])
+  @@index([metric])
+}
+
+// ─── Credit Transactions — AI credit ledger (purchased + monthly grants) ────
+// Each row is a debit or credit to the user's AI credit balance.
+
+model CreditTransaction {
+  id              String   @id
+  userId          String
+  subscriptionId  String?
+  amount          Int      // positive = credit added, negative = consumed
+  balanceAfter    Int      @default(0)
+  reason          String   // monthly_grant | purchase | synthesis | vlm | debate | plan_gen | refund | expiry
+  description     String   @default("")
+  relatedResourceId String @default("")  // investigation id, etc.
+  createdAt       DateTime @default(now())
+
+  user            User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription    Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([reason])
+  @@index([createdAt])
+}
+
+// ─── Invoices — cached Stripe invoices for the billing dashboard ─────────────
+
+model Invoice {
+  id                  String   @id
+  subscriptionId      String
+  stripeInvoiceId     String   @unique
+  number              String   @default("")
+  status              String   @default("open") // draft | open | paid | uncollectible | void
+  amountDue           Int      @default(0)   // cents
+  amountPaid          Int      @default(0)
+  currency            String   @default("usd")
+  periodStart         DateTime?
+  periodEnd           DateTime?
+  invoicePdfUrl       String   @default("")
+  hostedInvoiceUrl    String   @default("")
+  paidAt              DateTime?
+  createdAt           DateTime @default(now())
+
+  subscription        Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId])
+  @@index([status])
+  @@index([paidAt])
+}
+
+// ─── API Keys — for programmatic API access (Professional+ plans) ────────────
+
+model ApiKey {
+  id              String   @id
+  userId          String?
+  organizationId  String?
+  name            String   // user-given label
+  keyPrefix       String   @default("")  // first 8 chars for display (osk_xxxx)
+  hashedKey       String   @unique       // bcrypt hash of full key
+  scopesJson      String   @default("[]") // ["read","write","admin"]
+  rateLimitPerMin Int      @default(60)
+  lastUsedAt      DateTime?
+  lastIp          String   @default("")
+  isActive        Boolean  @default(true)
+  expiresAt       DateTime?
+  createdAt       DateTime @default(now())
+
+  user            User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization    Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([organizationId])
+  @@index([hashedKey])
+}
+
+// ─── Add-on Purchases — one-time credit packs or extra capacity ──────────────
+
+model AddOnPurchase {
+  id              String   @id
+  userId          String?
+  organizationId  String?
+  stripePaymentIntentId String @default("")
+  type            String   // ai_credit_pack | extra_investigations | custom
+  amountPaidCents Int      @default(0)
+  currency        String   @default("usd")
+  creditsGranted  Int      @default(0)
+  description     String   @default("")
+  fulfilledAt     DateTime?
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([organizationId])
+  @@index([type])
+}

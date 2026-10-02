@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="OSINTiger logo">
+  <title>OSINTiger</title>
+  <desc>
+    OSINTiger brand mark. A solid black disk with a single precise forward-slash
+    cut through it. The slash is drawn at the same weight, angle, and rhythm as
+    the forward-slash character used throughout the OSINTiger product in URLs,
+    paths, and comments — promoted to be the brand's defining stroke. A small
+    green terminal-cursor sits at the slash's lower exit point, reading as a
+    blinking prompt awaiting input. Canonical mark for light surfaces.
+  </desc>
+
+  <rect width="512" height="512" fill="#FFFFFF"/>
+
+  <!--
+    Mark construction.
+
+    1. Disk: solid black circle, the "O" of OSINTiger.
+       cx=256, cy=240, r=176. (Optical center shifted slightly up to make room
+       for the cursor underscore below and to balance the composition.)
+
+    2. Slash: a vertical white rectangle rotated 22° to form a forward-slash.
+       Drawn as a true parallelogram via rotation (the same way a monospaced
+       font draws its slash glyph — a tilted vertical stroke).
+       Rectangle: x=246, y=16, w=28, h=448, rotated 22° around the disk center.
+       The slash extends above and below the disk, suggesting a slash that
+       passes through the entire composition.
+
+    3. Cursor: a short, precise green underscore, positioned just below the
+       slash's lower exit point, like a terminal prompt awaiting input.
+       x=216, y=474, w=80, h=10.
+       The cursor is the only green in the mark — refined, restrained, single.
+  -->
+
+  <!-- 1. The disk -->
+  <circle cx="256" cy="240" r="176" fill="#0A0A0A"/>
+
+  <!-- 2. The slash — a vertical white rectangle rotated 22° clockwise -->
+  <g transform="rotate(22 256 240)">
+    <rect x="242" y="16" width="28" height="448" fill="#FFFFFF"/>
+  </g>
+
+  <!-- 3. The terminal-cursor underscore -->
+  <rect x="216" y="474" width="80" height="10" fill="#22E36A"/>
+</svg>

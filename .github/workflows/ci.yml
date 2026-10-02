@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Initialize local test database
+        run: npx prisma db push --skip-generate
+        env:
+          DATABASE_URL: "file:./db/test.db"
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run automated test suite
+        run: npm test
+        env:
+          DATABASE_URL: "file:./db/test.db"
+          LLM_ENCRYPTION_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
+
+      - name: Verify production build
+        run: npm run build
+        env:
+          DATABASE_URL: "file:./db/test.db"
+          LLM_ENCRYPTION_KEY: "0000000000000000000000000000000000000000000000000000000000000000"

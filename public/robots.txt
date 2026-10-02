@@ -1,0 +1,53 @@
+# OSINTiger — robots.txt
+# Allow all crawlers access to the main application
+# Block API endpoints (not meant for indexing)
+
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /auth/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /auth/
+
+User-agent: Twitterbot
+Allow: /
+Disallow: /api/
+
+User-agent: facebookexternalhit
+Allow: /
+Disallow: /api/
+
+User-agent: LinkedInBot
+Allow: /
+Disallow: /api/
+
+User-agent: Slackbot
+Allow: /
+Disallow: /api/
+
+# AI crawlers — allow for discoverability
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /auth/
+
+# Sitemap
+Sitemap: https://osintiger.com/sitemap.xml
