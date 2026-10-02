@@ -11,7 +11,7 @@
 
 ---
 
-## 60-Second Executive Summary
+## Summary
 
 - **Problem**: Most AI-assisted intelligence tools act as thin, unverified wrappers around commercial LLMs. They present probabilistic generated text without verifiable provenance, fail to cross-corroborate conflicting reports, suffer from hallucinations on critical indicators, and store third-party credentials insecurely.
 - **Solution**: OSINTiger is an engineered intelligence platform that decouples deterministic telemetry harvesting from model-assisted reasoning:
@@ -24,7 +24,7 @@
 
 ---
 
-## Key Hiring Signals & Engineering Highlights
+## Key Engineering Highlights
 
 | Architectural Dimension | Engineering Implementation | Why It Matters |
 |---|---|---|
