@@ -1,4 +1,4 @@
-# Recruiter & Interviewer Technical Quick-Review
+# Technical & Architectural Quick-Review
 
 > A 3-minute architectural overview and hiring signals guide for engineering managers and technical interviewers reviewing OSINTiger.
 

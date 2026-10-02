@@ -188,7 +188,7 @@ osintiger/
 │   ├── security.md             # Security architecture and cryptographic models
 │   ├── operations.md           # Production runbooks and health endpoints
 │   ├── limitations.md          # Honest boundaries and scaling limits
-│   └── recruiter-review.md     # 3-minute executive technical summary
+│   └── technical-review.md     # 3-minute executive technical summary
 ├── prisma/
 │   └── schema.prisma           # Prisma models for investigations, KB, and provenance
 ├── public/                     # Static brand assets, favicon, and social cards
@@ -266,7 +266,7 @@ Key areas of personal engineering ownership across the project include:
 - [Security Architecture & Cryptographic Controls](docs/security.md): Threat vectors, encryption, and SSRF prevention.
 - [Operations & Production Deployment](docs/operations.md): Setup instructions, systemd guide, and health probes.
 - [Engineering Boundaries & Limitations](docs/limitations.md): Scale limits and non-guarantees.
-- [Recruiter & Interviewer Technical Quick-Review](docs/recruiter-review.md): 3-minute executive review guide.
+- [Technical & Architectural Quick-Review](docs/technical-review.md): 3-minute executive review guide.
 
 ---
 
