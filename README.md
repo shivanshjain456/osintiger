@@ -39,68 +39,21 @@
 
 ## Architecture & System Topology
 
-```
-+-----------------------------------------------------------------------------------+
-|                                 Client Interface                                  |
-|         (Next.js App Router · 67 Hash-Based SPA Routes · JetBrains Mono UI)       |
-+-----------------------------------------------------------------------------------+
-                                         |
-                                         v
-+-----------------------------------------------------------------------------------+
-|                        Security & Rate-Limiting Gateway                           |
-|   - In-Memory Token Bucket Rate Limiting per IP and Auth Token                    |
-|   - Safe Error Handler: strips raw DB strings and stack traces (safe-error.ts)    |
-|   - Outbound SSRF Guard: blocks private IP ranges (RFC 1918) and cloud metadata   |
-+-----------------------------------------------------------------------------------+
-                                         |
-                                         v
-+-----------------------------------------------------------------------------------+
-|                        Investigation Orchestration Engine                         |
-|                                                                                   |
-|   [Target Detector]           [Source Router]               [Execution Modes]     |
-|   11 target formats parsed    74 collectors mapped by       - 8-Step Pipeline     |
-|   (IP, Hash, CVE, Wallet,     input category                - Autonomous Agent    |
-|   Domain, Org, Phone, Email)                                - Recursive Tree      |
-+-----------------------------------------------------------------------------------+
-                                         |
-                                         v
-+-----------------------------------------------------------------------------------+
-|                     Telemetry Collection & Harvesting Tier                        |
-|                                                                                   |
-|   [Tier 5: Authoritative]     [Tier 4: Threat Intel]      [Tier 3: Registries]    |
-|   SEC EDGAR, OFAC, NVD,       VirusTotal, AbuseIPDB,      crt.sh, Google DNS,     |
-|   CISA KEV, Interpol          AlienVault OTX, GreyNoise   OpenCorporates, ICIJ    |
-+-----------------------------------------------------------------------------------+
-                                         |
-                                         v
-+-----------------------------------------------------------------------------------+
-|                 Evidence Normalization & Integrity Pipeline                       |
-|                                                                                   |
-|   [Normalizer]            [Confidence Engine]         [Attribution Validator]     |
-|   Uniform finding models  5-dimension scoring model   Programmatic regex check    |
-|   and schema mapping      weighted by reliability     flags unsourced statements  |
-+-----------------------------------------------------------------------------------+
-                                         |
-                                         v
-+-----------------------------------------------------------------------------------+
-|                    Synthesis & Cognitive Reasoning Tier                           |
-|                                                                                   |
-|   [Richards Heuer ACH Matrix]              [Multi-Agent Adversarial Debate]       |
-|   Evaluates diagnostic consistency         Advocate vs Skeptic debate rounds      |
-|                                                                                   |
-|   [BYO-LLM Provider Engine]                                                       |
-|   AES-256-GCM encrypted key storage (OpenAI / Anthropic / Local fallback)         |
-+-----------------------------------------------------------------------------------+
-                                         |
-                                         v
-+-----------------------------------------------------------------------------------+
-|                    Persistence & Knowledge Base (Prisma ORM)                      |
-|                                                                                   |
-|   - SQLite local datastore (configurable to PostgreSQL via Prisma)                |
-|   - Immutable Provenance Events with SHA-256 payload digests                      |
-|   - Knowledge Base Entity Graph with cross-investigation links                    |
-+-----------------------------------------------------------------------------------+
-```
+The diagram below illustrates OSINTiger's C4 Component model, mapping the flow from the untrusted analyst browser surface through the investigation pipeline, evidence normalizer, provenance ledger, and AES-256-GCM encrypted BYO-key vault out to external intelligence sources and LLM inference providers.
+
+[![OSINTiger System Architecture and Trust Boundaries](docs/architecture/architecture.drawio.svg)](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1&title=architecture.drawio.svg#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fshivanshjain456%2Fosintiger%2Fmain%2Fdocs%2Farchitecture%2Farchitecture.drawio.svg)
+
+> **Interactive Diagram Navigation:**
+> [Open interactive diagram](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1&title=architecture.drawio.svg#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fshivanshjain456%2Fosintiger%2Fmain%2Fdocs%2Farchitecture%2Farchitecture.drawio.svg) | [Edit diagram](https://app.diagrams.net/#Hshivanshjain456%2Fosintiger%2Fmain%2Fdocs%2Farchitecture%2Farchitecture.drawio.svg) | [Diagram source](docs/architecture/architecture.drawio.svg) | [Architecture docs](docs/architecture/README.md)
+> 
+> *Secondary Flow:* [Open Pipeline Flow diagram](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1&title=core-flows.drawio.svg#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fshivanshjain456%2Fosintiger%2Fmain%2Fdocs%2Farchitecture%2Fcore-flows.drawio.svg) | [Edit Pipeline Flow](https://app.diagrams.net/#Hshivanshjain456%2Fosintiger%2Fmain%2Fdocs%2Farchitecture%2Fcore-flows.drawio.svg)
+
+### Key Architectural Decisions Visible in the Diagram
+
+1. **Deterministic Telemetry Decoupling**: External intelligence sources (OFAC, crt.sh, SEC EDGAR, IPinfo) are queried via structured TypeScript handlers rather than autonomous model loops, ensuring predictable API quota consumption and testability.
+2. **Immutable Provenance Ledger**: Every ingested evidence item receives an immutable SHA-256 hash digest of its raw payload. Findings in generated reports must link to an authenticated Evidence ID or be rejected by the zero-hallucination guardrail.
+3. **AES-256-GCM BYO-Key Cryptographic Vault**: User-provided LLM API tokens are encrypted at rest with authenticated cipher tags (`auth_tag`), decrypted exclusively in ephemeral RAM during inference, and never logged or written to persistent files.
+4. **Structured Cognitive Analysis (ACH)**: Implements Richards Heuer's Analysis of Competing Hypotheses via multi-agent adversarial debate (Advocate vs. Skeptic) to systematically identify confirmation bias and evaluate diagnostic consistency.
 
 ---
 

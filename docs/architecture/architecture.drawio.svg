@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1260" height="960" viewBox="0 0 1260 960" content="&lt;mxfile host=&quot;app.diagrams.net&quot; modified=&quot;2026-10-03T02:00:00.000Z&quot; agent=&quot;Mozilla/5.0&quot; version=&quot;24.0.0&quot; type=&quot;embed&quot;&gt;
+  &lt;diagram id=&quot;osintiger-system&quot; name=&quot;OSINTiger Architecture&quot;&gt;
+    &lt;mxGraphModel dx=&quot;1400&quot; dy=&quot;900&quot; grid=&quot;1&quot; gridSize=&quot;10&quot; guides=&quot;1&quot; tooltips=&quot;1&quot; connect=&quot;1&quot; arrows=&quot;1&quot; fold=&quot;1&quot; page=&quot;1&quot; pageScale=&quot;1&quot; pageWidth=&quot;1260&quot; pageHeight=&quot;960&quot; math=&quot;0&quot; shadow=&quot;0&quot;&gt;
+      &lt;root&gt;
+        &lt;mxCell id=&quot;0&quot; /&gt;
+        &lt;mxCell id=&quot;1&quot; parent=&quot;0&quot; /&gt;
+        
+        &lt;mxCell id=&quot;header&quot; value=&quot;&amp;lt;b&amp;gt;OSINTiger — Intelligence Platform Architecture &amp;amp;amp; Trust Boundaries&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;C4 Component Model • Multi-Agent Investigation Pipeline • Immutable Provenance Ledger • AES-256-GCM BYO-Key Vault&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=none;fontColor=#FFFFFF;align=left;spacingLeft=20;fontSize=14;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;
+          &lt;mxGeometry x=&quot;40&quot; y=&quot;30&quot; width=&quot;1180&quot; height=&quot;70&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        
+        &lt;!-- Analyst Boundary --&gt;
+        &lt;mxCell id=&quot;analyst-boundary&quot; value=&quot;TRUST BOUNDARY: ANALYST WORKBENCH (UNTRUSTED BROWSER CLIENT)&quot; style=&quot;swimlane;whiteSpace=wrap;html=1;dashed=1;dashPattern=6 4;strokeColor=#94A3B8;fillColor=#F8FAFC;fontColor=#64748B;fontSize=11;startSize=26;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;
+          &lt;mxGeometry x=&quot;40&quot; y=&quot;120&quot; width=&quot;1180&quot; height=&quot;115&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;workbench&quot; value=&quot;&amp;lt;b&amp;gt;Investigation Workbench&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;Query intake, target formulation&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;fontColor=#1E3A8A;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;analyst-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;25&quot; y=&quot;34&quot; width=&quot;265&quot; height=&quot;66&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;graph-explorer&quot; value=&quot;&amp;lt;b&amp;gt;Entity Graph Explorer&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;Force-directed relationship canvas&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;fontColor=#1E3A8A;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;analyst-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;315&quot; y=&quot;34&quot; width=&quot;265&quot; height=&quot;66&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;evidence-matrix&quot; value=&quot;&amp;lt;b&amp;gt;Evidence Matrix &amp;amp;amp; Ledger&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;Immutable provenance hashes&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;fontColor=#1E3A8A;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;analyst-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;605&quot; y=&quot;34&quot; width=&quot;265&quot; height=&quot;66&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;ach-view&quot; value=&quot;&amp;lt;b&amp;gt;ACH &amp;amp;amp; Report View&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;Hypotheses matrix, analyst sign-off&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;fontColor=#1E3A8A;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;analyst-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;895&quot; y=&quot;34&quot; width=&quot;260&quot; height=&quot;66&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+
+        &lt;!-- Application Server Boundary --&gt;
+        &lt;mxCell id=&quot;app-boundary&quot; value=&quot;APPLICATION SERVER: INVESTIGATION PIPELINE &amp;amp;amp; MULTI-AGENT ENGINE&quot; style=&quot;swimlane;whiteSpace=wrap;html=1;strokeColor=#8B5CF6;strokeWidth=2;fillColor=#FFFFFF;fontColor=#6D28D9;fontSize=12;startSize=30;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;
+          &lt;mxGeometry x=&quot;40&quot; y=&quot;275&quot; width=&quot;810&quot; height=&quot;435&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;orchestrator&quot; value=&quot;&amp;lt;b&amp;gt;Pipeline Orchestrator&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• State machine coordinator&amp;lt;br&amp;gt;• Parallel source task runner&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#8B5CF6;fontColor=#4C1D95;fontSize=11;align=left;spacingLeft=10;&quot; vertex=&quot;1&quot; parent=&quot;app-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;48&quot; width=&quot;240&quot; height=&quot;85&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;normalizer&quot; value=&quot;&amp;lt;b&amp;gt;Evidence Normalizer&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• Raw telemetry payload parser&amp;lt;br&amp;gt;• Canonical schema mapping&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#8B5CF6;fontColor=#4C1D95;fontSize=11;align=left;spacingLeft=10;&quot; vertex=&quot;1&quot; parent=&quot;app-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;285&quot; y=&quot;48&quot; width=&quot;240&quot; height=&quot;85&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;provenance&quot; value=&quot;&amp;lt;b&amp;gt;Provenance &amp;amp;amp; Attribution&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• SHA-256 payload hash&amp;lt;br&amp;gt;• Immutable attribution chain&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#10B981;fontColor=#064E3B;fontSize=11;align=left;spacingLeft=10;&quot; vertex=&quot;1&quot; parent=&quot;app-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;550&quot; y=&quot;48&quot; width=&quot;240&quot; height=&quot;85&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;entity-res&quot; value=&quot;&amp;lt;b&amp;gt;Entity Resolution Engine&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• Cross-source linking&amp;lt;br&amp;gt;• Jaro-Winkler alias matching&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#6366F1;fontColor=#1E1B4B;fontSize=11;align=left;spacingLeft=10;&quot; vertex=&quot;1&quot; parent=&quot;app-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;155&quot; width=&quot;240&quot; height=&quot;95&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;ach-engine&quot; value=&quot;&amp;lt;b&amp;gt;ACH &amp;amp;amp; Multi-Agent Debate&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• Competing hypotheses matrix&amp;lt;br&amp;gt;• Cross-examiner agent&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#10B981;fontColor=#064E3B;fontSize=11;align=left;spacingLeft=10;&quot; vertex=&quot;1&quot; parent=&quot;app-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;285&quot; y=&quot;155&quot; width=&quot;240&quot; height=&quot;95&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;vault&quot; value=&quot;&amp;lt;b&amp;gt;BYO-Key Cryptographic Vault&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• AES-256-GCM cipher&amp;lt;br&amp;gt;• 96-bit IV + 128-bit auth tag&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;fontColor=#78350F;fontSize=11;align=left;spacingLeft=10;&quot; vertex=&quot;1&quot; parent=&quot;app-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;550&quot; y=&quot;155&quot; width=&quot;240&quot; height=&quot;95&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;guardrails&quot; value=&quot;&amp;lt;b&amp;gt;Zero-Hallucination Guardrail &amp;amp;amp; Citation Enforcement Layer&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;Every assertion in generated reports must link to a valid Evidence ID with an immutable SHA-256 hash&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontColor=#1E293B;fontSize=11;align=left;spacingLeft=12;&quot; vertex=&quot;1&quot; parent=&quot;app-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;270&quot; width=&quot;770&quot; height=&quot;75&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+
+        &lt;!-- External Sources Boundary --&gt;
+        &lt;mxCell id=&quot;sources-boundary&quot; value=&quot;EXTERNAL INTELLIGENCE DATA SOURCES&quot; style=&quot;swimlane;whiteSpace=wrap;html=1;dashed=1;dashPattern=6 4;strokeColor=#F43F5E;fillColor=#FFF1F2;fontColor=#E11D48;fontSize=11;startSize=26;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;
+          &lt;mxGeometry x=&quot;875&quot; y=&quot;275&quot; width=&quot;345&quot; height=&quot;435&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;tier1&quot; value=&quot;&amp;lt;b&amp;gt;Tier 1: Regulatory &amp;amp;amp; Sanctions&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• OFAC SDN, OpenCorporates, SEC&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F43F5E;fontColor=#9F1239;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;sources-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;18&quot; y=&quot;42&quot; width=&quot;308&quot; height=&quot;80&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;tier2&quot; value=&quot;&amp;lt;b&amp;gt;Tier 2: Infrastructure &amp;amp;amp; Telemetry&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• crt.sh CT logs, IPinfo, DNS&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F43F5E;fontColor=#9F1239;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;sources-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;18&quot; y=&quot;134&quot; width=&quot;308&quot; height=&quot;80&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;tier3&quot; value=&quot;&amp;lt;b&amp;gt;Tier 3: Blockchain &amp;amp;amp; Public Leaks&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• Etherscan, ICIJ Offshore Leaks&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F43F5E;fontColor=#9F1239;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;sources-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;18&quot; y=&quot;226&quot; width=&quot;308&quot; height=&quot;80&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;llm-tier&quot; value=&quot;&amp;lt;b&amp;gt;External LLM Inference Boundary&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• OpenAI / Anthropic / Gemini / Ollama&amp;lt;br&amp;gt;• Ephemeral in-memory key injection&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#92400E;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;sources-boundary&quot;&gt;
+          &lt;mxGeometry x=&quot;18&quot; y=&quot;318&quot; width=&quot;308&quot; height=&quot;98&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+      &lt;/root&gt;
+    &lt;/mxGraphModel&gt;
+  &lt;/diagram&gt;
+&lt;/mxfile&gt;">
+  <defs>
+    <style type="text/css">
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+      text { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+      .title { font-weight: 700; fill: #0F172A; }
+      .subtitle { font-weight: 500; fill: #475569; }
+      .box-title { font-weight: 600; font-size: 14px; fill: #0F172A; }
+      .box-desc { font-weight: 400; font-size: 11px; fill: #475569; }
+      .badge-text { font-weight: 600; font-size: 10px; }
+      .boundary-title { font-weight: 700; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+      .edge-label { font-weight: 500; font-size: 11px; fill: #334155; background: #FFFFFF; }
+    </style>
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="108%" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.05   0 0 0 0 0.09   0 0 0 0 0.16  0 0 0 0.06 0" />
+      <feOffset dx="0" dy="2" />
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#475569" />
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563EB" />
+    </marker>
+    <marker id="arrow-emerald" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#7C3AED" />
+    </marker>
+  </defs>
+
+  <!-- Clean Canvas Background -->
+  <rect width="100%" height="100%" fill="#F8FAFC" rx="12" stroke="#CBD5E1" stroke-width="1.5" />
+  
+  
+  <!-- Header Banner -->
+  <g transform="translate(40, 30)">
+    <rect x="0" y="0" width="1180" height="70" rx="8" fill="#0F172A" />
+    <text x="24" y="32" font-size="20" font-weight="700" fill="#FFFFFF">OSINTiger — Intelligence Platform Architecture &amp; Trust Boundaries</text>
+    <text x="24" y="54" font-size="12" font-weight="400" fill="#94A3B8">C4 Component Model • Multi-Agent Investigation Pipeline • Immutable Provenance Ledger • AES-256-GCM BYO-Key Vault</text>
+    <rect x="940" y="22" width="215" height="26" rx="13" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <text x="1047" y="39" font-size="11" font-weight="600" fill="#38BDF8" text-anchor="middle">Next.js 16 • TypeScript • SQLite/Postgres</text>
+  </g>
+
+  <!-- 1. Analyst Presentation Tier (Untrusted Browser) -->
+  <g transform="translate(40, 120)">
+    <rect x="0" y="0" width="1180" height="115" rx="8" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6,4" />
+    <text x="16" y="22" font-size="11" font-weight="700" fill="#64748B" letter-spacing="1">TRUST BOUNDARY: ANALYST WORKBENCH (UNTRUSTED BROWSER CLIENT)</text>
+    
+    <!-- Investigation Workbench -->
+    <g transform="translate(25, 34)">
+      <rect x="0" y="0" width="265" height="66" rx="6" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.5" filter="url(#shadow)" />
+      <text x="14" y="22" font-size="13" font-weight="600" fill="#1E3A8A">Investigation Workbench</text>
+      <text x="14" y="38" font-size="11" fill="#3B82F6">Query composer, target intake, filters</text>
+      <text x="14" y="54" font-size="10" font-weight="500" fill="#60A5FA">Live streaming telemetry &amp; job status</text>
+    </g>
+
+    <!-- Graph Explorer -->
+    <g transform="translate(315, 34)">
+      <rect x="0" y="0" width="265" height="66" rx="6" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.5" filter="url(#shadow)" />
+      <text x="14" y="22" font-size="13" font-weight="600" fill="#1E3A8A">Entity Graph Explorer</text>
+      <text x="14" y="38" font-size="11" fill="#3B82F6">2D/3D force-directed relationship canvas</text>
+      <text x="14" y="54" font-size="10" font-weight="500" fill="#60A5FA">Node clustering, degree centrality, paths</text>
+    </g>
+
+    <!-- Evidence Matrix -->
+    <g transform="translate(605, 34)">
+      <rect x="0" y="0" width="265" height="66" rx="6" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.5" filter="url(#shadow)" />
+      <text x="14" y="22" font-size="13" font-weight="600" fill="#1E3A8A">Evidence Matrix &amp; Ledger</text>
+      <text x="14" y="38" font-size="11" fill="#3B82F6">Immutable provenance records &amp; hashes</text>
+      <text x="14" y="54" font-size="10" font-weight="500" fill="#60A5FA">Direct primary source citation links</text>
+    </g>
+
+    <!-- ACH Workspace -->
+    <g transform="translate(895, 34)">
+      <rect x="0" y="0" width="260" height="66" rx="6" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.5" filter="url(#shadow)" />
+      <text x="14" y="22" font-size="13" font-weight="600" fill="#1E3A8A">ACH Analysis &amp; Report View</text>
+      <text x="14" y="38" font-size="11" fill="#3B82F6">Competing hypotheses scoring matrix</text>
+      <text x="14" y="54" font-size="10" font-weight="500" fill="#60A5FA">Human analyst override &amp; sign-off</text>
+    </g>
+  </g>
+
+  <!-- Connectors: Client -> Server -->
+  <path d="M 160 235 L 160 275" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-blue)" fill="none" />
+  <path d="M 450 235 L 450 275" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-blue)" fill="none" />
+  <path d="M 740 235 L 740 275" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-blue)" fill="none" />
+  <path d="M 1025 235 L 1025 275" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-blue)" fill="none" />
+
+  <!-- 2. Application Core & Orchestration (Middle Left) -->
+  <g transform="translate(40, 275)">
+    <rect x="0" y="0" width="810" height="435" rx="8" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="2" filter="url(#shadow)" />
+    <rect x="0" y="0" width="810" height="32" rx="8" fill="#F5F3FF" />
+    <text x="16" y="21" font-size="12" font-weight="700" fill="#6D28D9" letter-spacing="0.5">APPLICATION SERVER: INVESTIGATION PIPELINE &amp; MULTI-AGENT ENGINE</text>
+
+    <!-- Pipeline Orchestrator -->
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="240" height="85" rx="6" fill="#F5F3FF" stroke="#8B5CF6" stroke-width="1.5" />
+      <text x="12" y="22" font-size="13" font-weight="600" fill="#4C1D95">Pipeline Orchestrator</text>
+      <text x="12" y="40" font-size="11" fill="#6D28D9">• Investigation state machine</text>
+      <text x="12" y="56" font-size="11" fill="#6D28D9">• Parallel source task runner</text>
+      <text x="12" y="72" font-size="11" fill="#6D28D9">• Rate-limit &amp; quota supervisor</text>
+    </g>
+
+    <!-- Normalizer & Ingestion -->
+    <g transform="translate(285, 48)">
+      <rect x="0" y="0" width="240" height="85" rx="6" fill="#F5F3FF" stroke="#8B5CF6" stroke-width="1.5" />
+      <text x="12" y="22" font-size="13" font-weight="600" fill="#4C1D95">Evidence Normalizer</text>
+      <text x="12" y="40" font-size="11" fill="#6D28D9">• Ingests raw telemetry payloads</text>
+      <text x="12" y="56" font-size="11" fill="#6D28D9">• Canonical schema mapping</text>
+      <text x="12" y="72" font-size="11" fill="#6D28D9">• Temporal event timestamping</text>
+    </g>
+
+    <!-- Provenance & Attribution -->
+    <g transform="translate(550, 48)">
+      <rect x="0" y="0" width="240" height="85" rx="6" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5" />
+      <text x="12" y="22" font-size="13" font-weight="600" fill="#064E3B">Provenance &amp; Attribution</text>
+      <text x="12" y="40" font-size="11" fill="#047857">• SHA-256 payload content hash</text>
+      <text x="12" y="56" font-size="11" fill="#047857">• Immutable attribution chain</text>
+      <text x="12" y="72" font-size="11" fill="#047857">• Source credibility weighting</text>
+    </g>
+
+    <!-- Entity Resolution -->
+    <g transform="translate(20, 155)">
+      <rect x="0" y="0" width="240" height="95" rx="6" fill="#EEF2FF" stroke="#6366F1" stroke-width="1.5" />
+      <text x="12" y="22" font-size="13" font-weight="600" fill="#1E1B4B">Entity Resolution Engine</text>
+      <text x="12" y="40" font-size="11" fill="#4F46E5">• Cross-source identifier linking</text>
+      <text x="12" y="56" font-size="11" fill="#4F46E5">• Exact key deduplication</text>
+      <text x="12" y="72" font-size="11" fill="#4F46E5">• Jaro-Winkler alias matching</text>
+      <text x="12" y="88" font-size="10" font-weight="600" fill="#4338CA">Builds connected entity graph</text>
+    </g>
+
+    <!-- ACH & Multi-Agent Debate -->
+    <g transform="translate(285, 155)">
+      <rect x="0" y="0" width="240" height="95" rx="6" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5" />
+      <text x="12" y="22" font-size="13" font-weight="600" fill="#064E3B">ACH &amp; Multi-Agent Debate</text>
+      <text x="12" y="40" font-size="11" fill="#047857">• Competing hypotheses matrix</text>
+      <text x="12" y="56" font-size="11" fill="#047857">• Cross-examiner &amp; advocate agent</text>
+      <text x="12" y="72" font-size="11" fill="#047857">• Contradiction detector</text>
+      <text x="12" y="88" font-size="10" font-weight="600" fill="#059669">Structured intelligence doctrine</text>
+    </g>
+
+    <!-- BYO-Key Cryptographic Vault -->
+    <g transform="translate(550, 155)">
+      <rect x="0" y="0" width="240" height="95" rx="6" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5" />
+      <text x="12" y="22" font-size="13" font-weight="600" fill="#78350F">BYO-Key Cryptographic Vault</text>
+      <text x="12" y="40" font-size="11" fill="#B45309">• AES-256-GCM cipher encryption</text>
+      <text x="12" y="56" font-size="11" fill="#B45309">• 96-bit random IV + 128-bit tag</text>
+      <text x="12" y="72" font-size="11" fill="#B45309">• Decrypted only in ephemeral RAM</text>
+      <text x="12" y="88" font-size="10" font-weight="600" fill="#D97706">Zero plaintext keys on disk</text>
+    </g>
+
+    <!-- Zero-Hallucination & Citation Subsystem -->
+    <g transform="translate(20, 270)">
+      <rect x="0" y="0" width="770" height="75" rx="6" fill="#F8FAFC" stroke="#64748B" stroke-width="1.5" />
+      <text x="16" y="24" font-size="13" font-weight="600" fill="#1E293B">Zero-Hallucination Guardrail &amp; Citation Enforcement Layer</text>
+      <text x="16" y="44" font-size="11" fill="#475569">• Deterministic verification gate: Every assertion in generated reports must link to a valid Evidence ID</text>
+      <text x="16" y="60" font-size="11" fill="#475569">• Unverified claims lacking immutable provenance hashes are flagged UNVERIFIED or pruned from intelligence briefs</text>
+    </g>
+
+    <!-- Human-in-the-Loop Review -->
+    <g transform="translate(20, 360)">
+      <rect x="0" y="0" width="770" height="60" rx="6" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.5" />
+      <text x="16" y="24" font-size="13" font-weight="600" fill="#1E3A8A">Human-in-the-Loop Review Boundary (Analyst Overrides &amp; Final Dossier Export)</text>
+      <text x="16" y="44" font-size="11" fill="#2563EB">Allows lead investigator to adjust hypothesis confidence scores, document dissenting judgments, and export PDF/JSON/CSV</text>
+    </g>
+  </g>
+
+  <!-- 3. External Intelligence Sources (Right Tier) -->
+  <g transform="translate(875, 275)">
+    <rect x="0" y="0" width="345" height="435" rx="8" fill="#FFF1F2" stroke="#F43F5E" stroke-width="1.5" stroke-dasharray="6,4" />
+    <text x="16" y="22" font-size="11" font-weight="700" fill="#E11D48" letter-spacing="1">EXTERNAL INTELLIGENCE DATA SOURCES</text>
+
+    <!-- Tier 1: Public Regulatory -->
+    <g transform="translate(18, 42)">
+      <rect x="0" y="0" width="308" height="80" rx="6" fill="#FFFFFF" stroke="#F43F5E" stroke-width="1.5" filter="url(#shadow)" />
+      <text x="14" y="22" font-size="13" font-weight="600" fill="#9F1239">Tier 1: Regulatory &amp; Sanctions</text>
+      <text x="14" y="38" font-size="11" fill="#BE123C">• OFAC SDN Sanctions List</text>
+      <text x="14" y="54" font-size="11" fill="#BE123C">• OpenCorporates global registry</text>
+      <text x="14" y="70" font-size="11" fill="#BE123C">• SEC EDGAR filings, FEC campaign finance</text>
+    </g>
+
+    <!-- Tier 2: Network & Infrastructure -->
+    <g transform="translate(18, 134)">
+      <rect x="0" y="0" width="308" height="80" rx="6" fill="#FFFFFF" stroke="#F43F5E" stroke-width="1.5" filter="url(#shadow)" />
+      <text x="14" y="22" font-size="13" font-weight="600" fill="#9F1239">Tier 2: Infrastructure &amp; Telemetry</text>
+      <text x="14" y="38" font-size="11" fill="#BE123C">• crt.sh Certificate Transparency logs</text>
+      <text x="14" y="54" font-size="11" fill="#BE123C">• IPinfo ASN, geolocation, reverse DNS</text>
+      <text x="14" y="70" font-size="11" fill="#BE123C">• Threat intelligence feed lookups</text>
+    </g>
+
+    <!-- Tier 3: Public Leaks & Registries -->
+    <g transform="translate(18, 226)">
+      <rect x="0" y="0" width="308" height="80" rx="6" fill="#FFFFFF" stroke="#F43F5E" stroke-width="1.5" filter="url(#shadow)" />
+      <text x="14" y="22" font-size="13" font-weight="600" fill="#9F1239">Tier 3: Blockchain &amp; Public Registries</text>
+      <text x="14" y="38" font-size="11" fill="#BE123C">• Etherscan wallet / smart contract logs</text>
+      <text x="14" y="54" font-size="11" fill="#BE123C">• ICIJ Offshore Leaks public database</text>
+      <text x="14" y="70" font-size="11" fill="#BE123C">• WHOIS historical ownership records</text>
+    </g>
+
+    <!-- External LLM Provider Inference -->
+    <g transform="translate(18, 318)">
+      <rect x="0" y="0" width="308" height="98" rx="6" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5" filter="url(#shadow)" />
+      <text x="14" y="22" font-size="13" font-weight="600" fill="#92400E">External LLM Inference Boundary</text>
+      <text x="14" y="40" font-size="11" fill="#B45309">• OpenAI / Anthropic / Gemini / Ollama</text>
+      <text x="14" y="56" font-size="11" fill="#B45309">• Decrypted BYO API keys passed per call</text>
+      <text x="14" y="72" font-size="11" fill="#B45309">• Zero model training on customer investigations</text>
+      <text x="14" y="90" font-size="10" font-weight="600" fill="#B45309">Strict confidentiality &amp; zero retention</text>
+    </g>
+  </g>
+
+  <!-- Connectors: Server <-> Sources -->
+  <path d="M 850 350 L 875 350" stroke="#F43F5E" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+  <path d="M 875 380 L 850 380" stroke="#F43F5E" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow)" fill="none" />
+
+  <!-- 4. Persistence & Storage Layer (Bottom) -->
+  <g transform="translate(40, 730)">
+    <rect x="0" y="0" width="810" height="120" rx="8" fill="#EEF2FF" stroke="#6366F1" stroke-width="2" filter="url(#shadow)" />
+    <text x="16" y="22" font-size="12" font-weight="700" fill="#3730A3" letter-spacing="0.5">PERSISTENCE LAYER: KNOWLEDGE BASE, EVIDENCE LEDGER &amp; GRAPH STORE</text>
+
+    <!-- Investigations Table -->
+    <g transform="translate(20, 36)">
+      <rect x="0" y="0" width="180" height="70" rx="5" fill="#FFFFFF" stroke="#6366F1" stroke-width="1.2" />
+      <text x="10" y="20" font-size="12" font-weight="600" fill="#1E1B4B">investigations</text>
+      <text x="10" y="36" font-size="10" fill="#4F46E5">id, title, status, plan</text>
+      <text x="10" y="50" font-size="10" fill="#4F46E5">user_id, confidence</text>
+      <text x="10" y="64" font-size="10" fill="#4F46E5">created_at, updated_at</text>
+    </g>
+
+    <!-- Evidence Ledger Table -->
+    <g transform="translate(215, 36)">
+      <rect x="0" y="0" width="185" height="70" rx="5" fill="#FFFFFF" stroke="#6366F1" stroke-width="1.2" />
+      <text x="10" y="20" font-size="12" font-weight="600" fill="#1E1B4B">evidence_records</text>
+      <text x="10" y="36" font-size="10" fill="#4F46E5">id, source, raw_hash</text>
+      <text x="10" y="50" font-size="10" fill="#4F46E5">provenance_chain, json</text>
+      <text x="10" y="64" font-size="10" fill="#4F46E5">confidence_score, date</text>
+    </g>
+
+    <!-- Graph Nodes & Edges -->
+    <g transform="translate(415, 36)">
+      <rect x="0" y="0" width="185" height="70" rx="5" fill="#FFFFFF" stroke="#6366F1" stroke-width="1.2" />
+      <text x="10" y="20" font-size="12" font-weight="600" fill="#1E1B4B">graph_nodes &amp; edges</text>
+      <text x="10" y="36" font-size="10" fill="#4F46E5">source_node, target_node</text>
+      <text x="10" y="50" font-size="10" fill="#4F46E5">relation_type, weight</text>
+      <text x="10" y="64" font-size="10" fill="#4F46E5">evidence_pointer_id</text>
+    </g>
+
+    <!-- Encrypted BYO Keys Store -->
+    <g transform="translate(615, 36)">
+      <rect x="0" y="0" width="175" height="70" rx="5" fill="#FFFFFF" stroke="#6366F1" stroke-width="1.2" />
+      <text x="10" y="20" font-size="12" font-weight="600" fill="#1E1B4B">user_api_vault</text>
+      <text x="10" y="36" font-size="10" fill="#4F46E5">provider, ciphertext</text>
+      <text x="10" y="50" font-size="10" fill="#4F46E5">iv_nonce, auth_tag</text>
+      <text x="10" y="64" font-size="10" fill="#4F46E5">user_id, updated_at</text>
+    </g>
+  </g>
+
+  <!-- Connectors: Server -> DB -->
+  <path d="M 440 710 L 440 730" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+
+  <!-- 5. Legend at Bottom -->
+  <g transform="translate(40, 870)">
+    <rect x="0" y="0" width="1180" height="50" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="16" y="30" font-size="11" font-weight="700" fill="#475569">LEGEND:</text>
+    
+    <rect x="85" y="18" width="14" height="14" rx="3" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.5"/>
+    <text x="106" y="30" font-size="11" fill="#334155">Analyst Workbench</text>
+
+    <rect x="235" y="18" width="14" height="14" rx="3" fill="#F5F3FF" stroke="#8B5CF6" stroke-width="1.5"/>
+    <text x="256" y="30" font-size="11" fill="#334155">Investigation Core</text>
+
+    <rect x="385" y="18" width="14" height="14" rx="3" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
+    <text x="406" y="30" font-size="11" fill="#334155">Provenance &amp; Attribution</text>
+
+    <rect x="575" y="18" width="14" height="14" rx="3" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+    <text x="596" y="30" font-size="11" fill="#334155">Cryptographic Vault</text>
+
+    <rect x="740" y="18" width="14" height="14" rx="3" fill="#EEF2FF" stroke="#6366F1" stroke-width="1.5"/>
+    <text x="761" y="30" font-size="11" fill="#334155">Graph &amp; Evidence Store</text>
+
+    <rect x="915" y="18" width="14" height="14" rx="3" fill="#FFF1F2" stroke="#F43F5E" stroke-width="1.5"/>
+    <text x="936" y="30" font-size="11" fill="#334155">External OSINT Sources</text>
+  </g>
+
+</svg>

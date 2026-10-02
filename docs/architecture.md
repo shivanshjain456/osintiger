@@ -4,6 +4,15 @@
 
 ---
 
+## Interactive Architecture Diagrams
+
+Editable vector diagrams are maintained in [`docs/architecture/`](./architecture/README.md):
+
+* **System Architecture & Trust Boundaries**: [Open in Lightbox](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1&title=architecture.drawio.svg#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fshivanshjain456%2Fosintiger%2Fmain%2Fdocs%2Farchitecture%2Farchitecture.drawio.svg) | [Edit Diagram](https://app.diagrams.net/#Hshivanshjain456%2Fosintiger%2Fmain%2Fdocs%2Farchitecture%2Farchitecture.drawio.svg)
+* **Investigation Lifecycle & Zero-Hallucination Pipeline**: [Open in Lightbox](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1&title=core-flows.drawio.svg#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fshivanshjain456%2Fosintiger%2Fmain%2Fdocs%2Farchitecture%2Fcore-flows.drawio.svg) | [Edit Diagram](https://app.diagrams.net/#Hshivanshjain456%2Fosintiger%2Fmain%2Fdocs%2Farchitecture%2Fcore-flows.drawio.svg)
+
+---
+
 ## 1. System Topology Overview
 
 OSINTiger is architected as an evidence-first intelligence collection, normalization, correlation, and synthesis system. It decouples deterministic data harvesting from AI-assisted inference, ensuring every reported conclusion is grounded in verifiable public telemetry.
