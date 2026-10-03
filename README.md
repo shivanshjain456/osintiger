@@ -78,7 +78,7 @@ $ npm test
 > osintiger@1.0.0 test
 > vitest run
 
- RUN  v4.1.10 C:/Projects/3. PERSONAL/OSINTiger
+ RUN  v4.1.10 ./
 
  ✓ src/lib/osint/__tests__/store.test.ts (12 tests)
  ✓ src/lib/osint/__tests__/confidence-engine.test.ts (7 tests)
@@ -164,7 +164,7 @@ npm run lint
 npm run build
 ```
 
-Individual test suites can be inspected under [`src/lib/osint/__tests__/`](file:///c:/Projects/3.%20PERSONAL/OSINTiger/src/lib/osint/__tests__/):
+Individual test suites can be inspected under [`src/lib/osint/__tests__/`](src/lib/osint/__tests__/):
 - `attribution.test.ts`: Verifies programmatic enforcement of `[SOURCE]` citations.
 - `confidence-engine.test.ts`: Asserts multi-dimensional reliability calculations.
 - `llm-security.test.ts`: Tests AES-256-GCM encryption, tampering rejection, and key safety.
