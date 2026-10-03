@@ -61,7 +61,7 @@ worklog.md
 local-*
 test/
 prompt/
-.zscripts/*.pid
+download/
 
 # Operating System & Editor Files
 .DS_Store
