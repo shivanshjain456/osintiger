@@ -196,7 +196,7 @@ osintiger/
 │   ├── og-image.png            # Social preview card
 │   └── favicon.png             # Application favicon
 ├── scripts/                    # Utility scripts, seeders, and build helpers
-│   ├── copy-standalone.js      # Cross-platform standalone asset bundler
+│   ├── copy-standalone.mjs     # Cross-platform standalone asset bundler
 │   ├── seed-demo.ts            # Synthetic demonstration data seeder
 │   └── seed-plans.ts           # Subscription tiers seeder
 ├── src/

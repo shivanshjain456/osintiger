@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "next build && node scripts/copy-standalone.js",
+    "build": "next build && node scripts/copy-standalone.mjs",
     "start": "next start -p 3000",
     "lint": "eslint src/",
     "db:push": "prisma db push",
