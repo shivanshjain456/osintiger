@@ -84,7 +84,7 @@
     "@img/sharp-libvips-linux-x64": "^1.2.4",
     "@img/sharp-linux-x64": "^0.35.5",
     "@rolldown/binding-linux-x64-gnu": "1.1.5",
-    "@unrs/resolver-binding-linux-x64-gnu": "1.11.1"
+    "@unrs/resolver-binding-linux-x64-gnu": "1.12.2"
   },
   "overrides": {
     "braces": "^3.0.3",
