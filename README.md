@@ -9,6 +9,13 @@
 [![Tests](https://img.shields.io/badge/Vitest-308%20Passing-green)](https://vitest.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/brand/svg/osintiger-primary-dark.svg">
+    <img src="public/brand/svg/osintiger-primary.svg" alt="OSINTiger — multi-source intelligence & threat-research platform" width="480">
+  </picture>
+</p>
+
 ---
 
 ## Summary

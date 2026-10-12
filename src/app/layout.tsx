@@ -78,6 +78,12 @@ export const metadata: Metadata = {
         height: 630,
         alt: "OSINTiger — Anonymous Intelligence Platform",
       },
+      {
+        url: "/brand/png/osintiger-mark-1024.png",
+        width: 1024,
+        height: 1024,
+        alt: "OSINTiger Logo Mark",
+      },
     ],
   },
   twitter: {
