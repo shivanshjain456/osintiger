@@ -1,13 +1,13 @@
-# OSINTiger — identity usage
+# OSINTiger - identity usage
 
 > Multi-agent open-source intelligence and threat-analysis platform with source attribution and evidence provenance.
 > Audience: Security researchers and threat-intelligence analysts
 
 ## Concept
-A scanner tile carved by three diagonal claw slashes — tiger stripes as signal cuts: predatory collection, attributed evidence.
+A scanner tile carved by three diagonal claw slashes - tiger stripes as signal cuts: predatory collection, attributed evidence.
 
 The compact mark carries the identity alone; the primary lockup pairs it with the
-'OSINTiger' wordmark (Space Grotesk SemiBold, converted to outlines — no font
+'OSINTiger' wordmark (Space Grotesk SemiBold, converted to outlines - no font
 required to render the production files).
 
 ## Colour
@@ -18,7 +18,7 @@ required to render the production files).
 
 Single-colour reproduction: use `*-mono.svg` (all geometry set to
 `currentColor`); set any colour ≥ 4.5:1 contrast against the background.
-Negative space (needle, slashes, core, route) must always show the background —
+Negative space (needle, slashes, core, route) must always show the background -
 never fill it with a second colour.
 
 ## Typography
